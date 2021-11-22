@@ -1,9 +1,10 @@
 const router = require('express').Router();
 
 const Group = require('../models/Group.model')
+const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
 
 // get all groups and render
-router.get('/groups', async (req, res, next) => {
+router.get('/groups', isLoggedIn(), async (req, res, next) => {
   try {
     const groups = await Group.find()
     res.render('groups/index', { groups })
@@ -13,7 +14,7 @@ router.get('/groups', async (req, res, next) => {
 })
 
 // create a group
-router.post('/groups/new', async (req, res, next) => {
+router.post('/groups/new', isLoggedIn(), async (req, res, next) => {
   try {
     const group = req.body
     const user = req.session.currentUser
@@ -38,7 +39,7 @@ router.post('/groups/new', async (req, res, next) => {
 })
 
 // add user to group
-router.post('/groups/:groupId/add/', async (req, res, next) => {
+router.post('/groups/:groupId/add/', isLoggedIn(), async (req, res, next) => {
   try {
     const groupId = req.params.groupId
     const user = req.session.currentUser
