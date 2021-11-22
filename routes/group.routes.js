@@ -4,7 +4,7 @@ const Group = require('../models/Group.model')
 const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
 
 // get all groups and render
-router.get('/groups', isLoggedIn(), async (req, res, next) => {
+router.get('/groups', async (req, res, next) => {
   try {
     const groups = await Group.find()
     res.render('groups/index', { groups })
@@ -13,33 +13,44 @@ router.get('/groups', isLoggedIn(), async (req, res, next) => {
   }
 })
 
-// create a group
-router.post('/groups/new', isLoggedIn(), async (req, res, next) => {
+router.get('/groups/new', async (req, res, next) => {
   try {
-    const group = req.body
-    const user = req.session.currentUser
+    res.render('groups/newGroup')
+  } catch (error) {
+    next(new Error(error.message))
+  }
+})
 
-    if (!user) {
-      next(new Error(`User ${user} not found`))
-    }
+// create a group
+router.post('/groups', async (req, res, next) => {
+  try {
+    const { name, description, image } = req.body
+    //const user = req.session.currentUser
 
-    user.role === 'admin'
+    // if (!user) {
+    //   next(new Error(`User ${user} not found`))
+    // }
 
-    const newGroup = Group.create({
-      ...user,
-      group: group
+    //user.role === 'admin'
+
+    const newGroup = await Group.create({
+      //...user,
+      name, 
+      description, 
+      image   
     })
 
     await Group.save(newGroup)
 
     res.redirect('/groups')
   } catch (error) {
-    next(new Error('User not found'))
+    console.log(error)
+    next(new Error('Error'))
   }
 })
 
 // add user to group
-router.post('/groups/:groupId/add/', isLoggedIn(), async (req, res, next) => {
+router.post('/groups/:groupId/add/', isLoggedIn, async (req, res, next) => {
   try {
     const groupId = req.params.groupId
     const user = req.session.currentUser
