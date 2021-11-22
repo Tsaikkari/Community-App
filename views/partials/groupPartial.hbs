@@ -1,0 +1,19 @@
+<div class='card'>
+  {{#if image}}
+    <img class='group-img' src='{{image}}' alt={{name}} />
+  {{else}}
+    <div class='no-image'>No image</div>
+  {{/if}}
+  <div class="footer">
+    <h4>{{name}}</h4>
+    <p>{{description}}</p>
+    {{!-- {{#each members}}
+    <ul>
+      <li>{{username}}</li>
+    </ul>
+    {{/each}} --}}
+    <form action="/groups/{{_id}}/add" method="POST">
+      <button type="submit">Join this group</button>
+    </form>
+  </div>
+</div>
