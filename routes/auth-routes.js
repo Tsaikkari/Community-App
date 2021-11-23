@@ -19,6 +19,7 @@ const bcryptjs = require("bcryptjs");
 const saltRounds = 10;
 router.post("/signup", (req, res, next) => {
     const { username, email, password ,isAdmin,isGroupCreator,dateOfBirth,gender} = req.body;
+
   // const { username, email, password } = req.body;
   if (!username || !email || !password) {
     res.render("auth/signup", {
