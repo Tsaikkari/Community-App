@@ -6,9 +6,25 @@
     <div class='no-image'>No image</div>
   {{/if}}
   <div class="footer">
-    <h4>{{group.name}}</h4>
+    <h2>{{group.name}}</h2>
     <p>{{group.description}}</p>
-    <form action="/groups/{{group._id}}/add" method="POST">
+    <div class="events-div">
+      {{#if group.events}}
+      <h3>Upcoming events</h3>
+      {{#each group.events}}
+      <div class="event">
+        <p>{{name}}</p>
+        <p>{{description}}</p>
+        <p>When: {{date}}</p>
+        <p>Where: {{address}}</p>
+        <p>Host: {{groupCreator}}</p>
+      </div>
+      {{/each}}
+      {{else}}
+      <p>No events</p>
+    </div>
+      {{/if}}
+    <form class="join-group-form-btn" action="/groups/{{group._id}}/add" method="POST">
       <button type="submit">Join this group</button>
     </form>
     {{#each members}}

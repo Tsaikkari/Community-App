@@ -13,7 +13,7 @@ const eventSchema = new Schema(
     address: {
       type: String
     },
-    user: {
+    groupCreator: {
       type: Schema.Types.ObjectId,
       required: true, 
       ref: 'user'
