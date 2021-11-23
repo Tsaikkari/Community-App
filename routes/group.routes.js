@@ -61,7 +61,7 @@ router.post('/groups/:groupId/add/', isLoggedIn, async (req, res, next) => {
 
     group.members.push(id)
 
-    await Group.save(group)
+    await Group.updateOne(group)
 
   } catch (error) {
     next(new Error(error.message))
