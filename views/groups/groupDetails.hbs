@@ -1,4 +1,8 @@
 <h1>Group Details</h1>
 <div class="details">
   {{> groupPartial this}}
+  {{!-- TODO --}}
+  <form action="/groups/{{_id}}/add" method="POST">
+    <button type="submit">Join this group</button>
+    </form>
 </div>

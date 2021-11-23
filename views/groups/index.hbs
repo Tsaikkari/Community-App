@@ -2,6 +2,7 @@
 {{#each groups}}
 <div class="card">
   {{> groupPartial this}}
+  
   <a href="/groups/{{id}}" class="link-btn-groups">View Group</a>
   {{#each users}}
     {{#if admin}}

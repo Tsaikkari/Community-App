@@ -21,6 +21,14 @@ router.get('/groups/new', async (req, res, next) => {
   }
 })
 
+router.get('/groups/:groupId', async (req, res, next) => {
+  try {
+    res.render('groups/groupDetails')
+  } catch (error) {
+    next(new Error('Group not found', error))
+  }
+})
+
 // create a group
 router.post('/groups', isLoggedIn, async (req, res, next) => {
   try {
@@ -28,10 +36,10 @@ router.post('/groups', isLoggedIn, async (req, res, next) => {
     const id = req.session.currentUser._id
 
     if (!id) {
-      next(new Error(`User ${user} not found`))
+      next(new Error(`User not found`))
     }
 
-    user.role === 'admin'
+    req.session.currentUser.role === 'admin'
 
     await Group.create({
       members: [id],
@@ -42,13 +50,12 @@ router.post('/groups', isLoggedIn, async (req, res, next) => {
 
     res.redirect('/groups')
   } catch (error) {
-    console.log(error)
-    next(new Error('Error'))
+    next(new Error('Error', error))
   }
 })
 
 // add user to group
-router.post('/groups/:groupId/add/', isLoggedIn, async (req, res, next) => {
+router.post('/groups/:groupId/add', isLoggedIn, async (req, res, next) => {
   try {
     const groupId = req.params.groupId
     const id = req.session.currentUser._id
