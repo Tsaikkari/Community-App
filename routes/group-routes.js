@@ -62,25 +62,16 @@ const findByName = async (groupName) => {
 router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
   try {
     const groupId = req.params.id
-    console.log('groupIDDDDDDDDDDDDDD', groupId)
-    const group = await Group.findById(groupId).populate('members')
-    console.log('GRRRROUUP', group)
+    const group = await Group.findById(groupId)
     const userId = req.session.currentUser._id
 
-    if (!userId) {
-      return next(new Error(`User not found`))
-    }
+    const members = group.members.push(userId)
+    
 
-    if (!group) {
-      return next(new Error(`Group not found`))
-    }
-
-    group.members.push(userId)
-
-    await Group.findByIdAndUpdate(id, { group })
+    await Group.findByIdAndUpdate(groupId, { ...group, members })
     res.redirect(`/groups`)
   } catch (error) {
-    next(new Error('Group not found', error))
+    next(new Error(error.message))
   }
 })
 
