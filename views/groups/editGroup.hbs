@@ -11,8 +11,12 @@
 	{{!-- TODO --}}
 	<img type="text" src="" name="image" id="image" value="{{image}}">
   {{/with}}
-  <label for="members">Events: </label>
-  {{> eventPartial this}}
+  <label for="events">Events: </label>
+  <ul>
+		<li>
+			{{events}}
+		</li>
+	</ul>
  
 	<button type="submit">Edit Group</button>
 </form>

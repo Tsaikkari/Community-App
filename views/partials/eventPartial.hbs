@@ -1,0 +1,19 @@
+<div class='card'>
+  {{#if event}}
+  <div class="footer">
+    <h3>{{name}}</h3>
+    <p>{{description}}</p>
+    <p>When: {{date}}</p>
+    <p>Where: {{address}}</p>
+    <p>Host: {{groupCreator}}</p>
+    {{#each members}}
+    <ul>
+      <li>{{this.username}}</li>
+    </ul>
+    {{/each}}
+  {{else}}
+  <p>No events</p>
+  {{/if}}
+  </div>
+</div>
+

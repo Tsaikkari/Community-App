@@ -13,8 +13,8 @@ router.get('/groups', async (req, res, next) => {
   }
 })
 
-// add new group page
-router.get('/groups/new', async (req, res, next) => {
+// get add new group page
+router.get('/groups/new', isLoggedIn, async (req, res, next) => {
   try {
     res.render('groups/newGroup')
   } catch (error) {
@@ -30,15 +30,15 @@ router.post('/groups', isLoggedIn, async (req, res, next) => {
 
     if (!id) {
       next(new Error(`User not found`))
-    }
-
-    req.session.currentUser.role === 'admin'
+    } 
+      
+    req.session.currentUser.isGroupCreator = true
 
     await Group.create({
       members: [id],
       name, 
       description, 
-      image   
+      image, 
     })
 
     res.redirect('/groups')
@@ -58,28 +58,34 @@ const findByName = async (groupName) => {
   }
 }
 
-// TODO: fix
 // add user to group
-router.post('/groups/:id/add', async (req, res, next) => {
+router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
   try {
     const groupId = req.params.id
-    const group = await Group.findById(groupId)
+    console.log('groupIDDDDDDDDDDDDDD', groupId)
+    const group = await Group.findById(groupId).populate('members')
+    console.log('GRRRROUUP', group)
     const userId = req.session.currentUser._id
+
+    if (!userId) {
+      return next(new Error(`User not found`))
+    }
+
     if (!group) {
-      return next(new Error(`Group ${group} not found`))
+      return next(new Error(`Group not found`))
     }
 
     group.members.push(userId)
 
-    await Group.updateOne(group)
-    res.redirect(`/groups/${groupId}`)
+    await Group.findByIdAndUpdate(id, { group })
+    res.redirect(`/groups`)
   } catch (error) {
     next(new Error('Group not found', error))
   }
 })
 
 // get group detail page
-router.get('/groups/:groupId', async (req, res, next) => {
+router.get('/groups/:groupId', isLoggedIn, async (req, res, next) => {
   const id = req.params.groupId
   const group = await Group.findById(id).populate('members')
   try {
@@ -90,18 +96,18 @@ router.get('/groups/:groupId', async (req, res, next) => {
 })
 
 // get edit group page
-router.get('/groups/:id/edit', async (req, res, next) => {
+router.get('/groups/:id/edit', isLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id
     const group = await Group.findById(id)
     res.render('groups/editGroup', { group })
   } catch(error) {
-
+    next(new Error(error.message))
   }
 })
 
 // edit group
-router.post('/groups/:id', async (req, res, next) => {
+router.post('/groups/:id', isLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id
     const { name, description, image, events } = req.body
@@ -112,14 +118,14 @@ router.post('/groups/:id', async (req, res, next) => {
       image,
       events
     }, { new: true })
-    res.redirect(`/group/${id}`)
+    res.redirect(`/groups`)
   } catch (error) {
     next(new Error(error.message))
   }
 })
 
 // delete group
-router.post('/groups/:id/delete', async (req, res, next) => {
+router.post('/groups/:id/delete', isLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id
     await Group.findByIdAndRemove(id)
@@ -129,8 +135,19 @@ router.post('/groups/:id/delete', async (req, res, next) => {
   }
 })
 
-// create event
-router.post('/groups/:id/events/add', isLoggedIn, async (req, res, next) => {
+// get add events page of a group
+router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
+  try {
+    const group = await Group.findById(req.params.id)
+    console.log('GRRRROOOOOOUUUUUP', group)
+    res.render('/groups/newGrEvent', { group })
+  } catch (error) {
+    next(new Error('Events not found', error))
+  }
+})
+
+// create an event
+router.post('/groups/:id/events', isLoggedIn, async (req, res, next) => {
   try {
     const { name, description, date, address } = req.body
     const id = req.params.id
@@ -147,7 +164,8 @@ router.post('/groups/:id/events/add', isLoggedIn, async (req, res, next) => {
 
     group.events.push(event)
 
-    await group.save()
+    await group.create(event)
+    res.redirect(`/groups`)
   } catch (error) {
     next(new Error(error.message))
   }
