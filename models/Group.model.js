@@ -1,5 +1,29 @@
 const { Schema, model } = require("mongoose");
 
+const eventSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true
+    },
+    date: {
+      type: Date,
+      retuired: true
+    },
+    address: {
+      type: String
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      required: true, 
+      ref: 'user'
+    },
+  },
+  {
+    timestamps: true
+  }
+)
+
 const groupSchema = new Schema(
   {
     name: {
@@ -18,9 +42,9 @@ const groupSchema = new Schema(
         ref: 'User'
       }
     ],
+    events: [eventSchema]
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
 );
