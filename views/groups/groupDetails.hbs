@@ -2,7 +2,7 @@
 <div class="details">
   {{> groupPartial this}}
   {{!-- TODO --}}
-  <form action="/groups/{{_id}}/add" method="POST">
+  <form action="/groups/add/:name" method="POST" name="name" value="{{name}}">
     <button type="submit">Join this group</button>
-    </form>
+  </form>
 </div>

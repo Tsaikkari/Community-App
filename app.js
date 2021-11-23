@@ -36,8 +36,8 @@ app.use(
 
 // 👇 Start handling routes here
 const index = require('./routes/index');
-const authRouter = require('./routes/auth.routes'); 
-const groupRouter = require('./routes/group.routes');
+const authRouter = require('./routes/auth-routes'); 
+const groupRouter = require('./routes/group-routes');
 
 app.use('/', index);
 app.use('/', authRouter);

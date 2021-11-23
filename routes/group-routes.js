@@ -54,24 +54,34 @@ router.post('/groups', isLoggedIn, async (req, res, next) => {
   }
 })
 
-// add user to group
-router.post('/groups/:groupId/add', isLoggedIn, async (req, res, next) => {
+const findByName = async (groupName) => {
   try {
-    const groupId = req.params.groupId
-    const id = req.session.currentUser._id
+    const regex = new RegExp(`${groupName}`, 'ig')
+    const group = await Group.find({ name: { $regex: regex }})
 
-    const group = await Group.findById(groupId).populate('members')
+    return group
+  } catch (error) {
+    throw new Error(`Group ${groupName} not found`)
+  }
+}
 
+// TODO: fix
+// add user to group
+router.post('/groups/add/:name', async (req, res, next) => {
+  try {
+    const queryString = req.query.name
+    console.log('queryString', queryString)
+    const group = await findByName(queryString).populate('members')
+    const userId = req.session.currentUser._id
     if (!group) {
       return next(new Error(`Group ${group} not found`))
     }
 
-    group.members.push(id)
+    group.members.push(userId)
 
     await Group.updateOne(group)
-
   } catch (error) {
-    next(new Error(error.message))
+    next(new Error('Group not found', error))
   }
 })
 
