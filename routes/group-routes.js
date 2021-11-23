@@ -78,7 +78,6 @@ router.post('/groups/:id/add', async (req, res, next) => {
   }
 })
 
-// TODO Fix
 // get group detail page
 router.get('/groups/:groupId', async (req, res, next) => {
   const id = req.params.groupId
@@ -105,12 +104,13 @@ router.get('/groups/:id/edit', async (req, res, next) => {
 router.post('/groups/:id', async (req, res, next) => {
   try {
     const id = req.params.id
-    const { name, description, image } = req.body
+    const { name, description, image, events } = req.body
    
     await Group.findByIdAndUpdate(id, {
       name,
       description, 
-      image
+      image,
+      events
     }, { new: true })
     res.redirect(`/group/${id}`)
   } catch (error) {
@@ -129,7 +129,29 @@ router.post('/groups/:id/delete', async (req, res, next) => {
   }
 })
 
+// create event
+router.post('/groups/:id/events/add', isLoggedIn, async (req, res, next) => {
+  try {
+    const { name, description, date, address } = req.body
+    const id = req.params.id
 
+    const group = await Group.findById(id)
+
+    const event = {
+      name,
+      description, 
+      date, 
+      address,
+      groupCreator: req.session.currentUser._id
+    }
+
+    group.events.push(event)
+
+    await group.save()
+  } catch (error) {
+    next(new Error(error.message))
+  }
+})
 
 module.exports = router
 

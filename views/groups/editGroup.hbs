@@ -11,10 +11,8 @@
 	{{!-- TODO --}}
 	<img type="text" src="" name="image" id="image" value="{{image}}">
   {{/with}}
-  <label for="members">Members: </label>
-  <select name="cast">
-    {{{selected}}}
-  </select>
+  <label for="members">Events: </label>
+  {{> eventPartial this}}
  
 	<button type="submit">Edit Group</button>
 </form>

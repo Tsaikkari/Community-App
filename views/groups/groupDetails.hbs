@@ -27,7 +27,7 @@
     <form class="join-group-form-btn" action="/groups/{{group._id}}/add" method="POST">
       <button type="submit">Join this group</button>
     </form>
-    {{#each members}}
+    {{#each group.members}}
     <ul>
       <li>{{this.username}}</li>
     </ul>
