@@ -63,9 +63,7 @@ const findByName = async (groupName) => {
 router.post('/groups/:id/add', async (req, res, next) => {
   try {
     const groupId = req.params.id
-    console.log('groupId', groupId)
-    const group = await findById(groupId)
-    console.log('GRRROOOOUP', group)
+    const group = await Group.findById(groupId)
     const userId = req.session.currentUser._id
     if (!group) {
       return next(new Error(`Group ${group} not found`))
