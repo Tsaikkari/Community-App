@@ -18,7 +18,9 @@ router.post('/logout', (req, res, next) => {
 const bcryptjs = require("bcryptjs");
 const saltRounds = 10;
 router.post("/signup", (req, res, next) => {
-  const { username, email, password } = req.body;
+    const { username, email, password ,isAdmin,isGroupCreator,dateOfBirth,gender} = req.body;
+
+  // const { username, email, password } = req.body;
   if (!username || !email || !password) {
     res.render("auth/signup", {
       errorMessage:
@@ -26,7 +28,6 @@ router.post("/signup", (req, res, next) => {
     });
     return;
   }
-  
   //*************************************** */
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
   if (!regex.test(password)) {
@@ -44,9 +45,11 @@ router.post("/signup", (req, res, next) => {
     .then((salt) => bcryptjs.hash(password, salt))
     .then((hashedPassword) => {
       return User.create({
-        username,
-        email,
+        username:username,
+        email:email,
         passwordHash: hashedPassword,
+        gender:gender,
+        dateOfBirth:dateOfBirth
       });
     })
     .then((userFromDB) => {
