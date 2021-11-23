@@ -13,19 +13,12 @@ router.get('/groups', async (req, res, next) => {
   }
 })
 
+// add new group page
 router.get('/groups/new', async (req, res, next) => {
   try {
     res.render('groups/newGroup')
   } catch (error) {
     next(new Error(error.message))
-  }
-})
-
-router.get('/groups/:groupId', async (req, res, next) => {
-  try {
-    res.render('groups/groupDetails')
-  } catch (error) {
-    next(new Error('Group not found', error))
   }
 })
 
@@ -67,11 +60,12 @@ const findByName = async (groupName) => {
 
 // TODO: fix
 // add user to group
-router.post('/groups/add/:name', async (req, res, next) => {
+router.post('/groups/:id/add', async (req, res, next) => {
   try {
-    const queryString = req.query.name
-    console.log('queryString', queryString)
-    const group = await findByName(queryString).populate('members')
+    const groupId = req.params.id
+    console.log('groupId', groupId)
+    const group = await findById(groupId)
+    console.log('GRRROOOOUP', group)
     const userId = req.session.currentUser._id
     if (!group) {
       return next(new Error(`Group ${group} not found`))
@@ -80,19 +74,64 @@ router.post('/groups/add/:name', async (req, res, next) => {
     group.members.push(userId)
 
     await Group.updateOne(group)
+    res.redirect(`/groups/${groupId}`)
   } catch (error) {
     next(new Error('Group not found', error))
   }
 })
 
-// edit group
-router.post('/groups/:id/edit', (req, res, next) => {
+// TODO Fix
+// get group detail page
+router.get('/groups/:groupId', async (req, res, next) => {
+  const id = req.params.groupId
+  const group = await Group.findById(id).populate('members')
   try {
+    res.render('groups/groupDetails', { group })
+  } catch (error) {
+    next(new Error('Group not found', error))
+  }
+})
 
+// get edit group page
+router.get('/groups/:id/edit', async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const group = await Group.findById(id)
+    res.render('groups/editGroup', { group })
   } catch(error) {
 
   }
 })
+
+// edit group
+router.post('/groups/:id', async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const { name, description, image } = req.body
+   
+    await Group.findByIdAndUpdate(id, {
+      name,
+      description, 
+      image
+    }, { new: true })
+    res.redirect(`/group/${id}`)
+  } catch (error) {
+    next(new Error(error.message))
+  }
+})
+
+// delete group
+router.post('/groups/:id/delete', async (req, res, next) => {
+  try {
+    const id = req.params.id
+    await Group.findByIdAndRemove(id)
+    res.redirect('/groups')
+  } catch (error) {
+    next(new Error(error.message))
+  }
+})
+
+
 
 module.exports = router
 

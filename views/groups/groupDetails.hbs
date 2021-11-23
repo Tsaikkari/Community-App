@@ -1,8 +1,31 @@
 <h1>Group Details</h1>
-<div class="details">
-  {{> groupPartial this}}
-  {{!-- TODO --}}
-  <form action="/groups/add/:name" method="POST" name="name" value="{{name}}">
-    <button type="submit">Join this group</button>
-  </form>
+<div class='card'>
+  {{#if group.image}}
+    <img class='group-img' src='{{group.image}}' alt={{group.name}} />
+  {{else}}
+    <div class='no-image'>No image</div>
+  {{/if}}
+  <div class="footer">
+    <h4>{{group.name}}</h4>
+    <p>{{group.description}}</p>
+    <form action="/groups/{{group._id}}/add" method="POST">
+      <button type="submit">Join this group</button>
+    </form>
+    {{#each members}}
+    <ul>
+      <li>{{this.username}}</li>
+    </ul>
+    {{/each}}
+  </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
