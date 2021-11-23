@@ -20,7 +20,21 @@ const userSchema = new Schema(
     passwordHash: {
       type: String,
       required: [true, 'Password is required.']
-    }
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    isGroupCreator: {
+      type: Boolean,
+      default: false,
+    },
+    dateOfBirth: {
+      type: Date,
+    },
+    gender: {
+      type: String,
+    },
   },
   {
     timestamps: true
