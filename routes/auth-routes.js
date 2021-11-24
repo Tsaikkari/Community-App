@@ -104,7 +104,6 @@ router.post("/login", (req, res, next) => {
     });
     return;
   }
-
   User.findOne({ email })
     .then((user) => {
       if (!user) {

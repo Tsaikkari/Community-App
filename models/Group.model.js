@@ -5,7 +5,7 @@ const groupSchema = new Schema(
     name: {
       type: String,
       unique: true,
-      required: true
+      required: true,
     },
     description: {
       type: String,
@@ -15,8 +15,8 @@ const groupSchema = new Schema(
     members: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'User'
-      }
+        ref: "User",
+      },
     ],
   },
   {
