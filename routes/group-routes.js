@@ -47,6 +47,7 @@ router.post('/groups', isLoggedIn, async (req, res, next) => {
   }
 })
 
+// TODO: search bar
 const findByName = async (groupName) => {
   try {
     const regex = new RegExp(`${groupName}`, 'ig')
@@ -62,12 +63,11 @@ const findByName = async (groupName) => {
 router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
   try {
     const groupId = req.params.id
-    const group = await Group.findById(groupId)
+    const group = await Group.findById(groupId).populate('members')
     const userId = req.session.currentUser._id
 
     const members = group.members.push(userId)
     
-
     await Group.findByIdAndUpdate(groupId, { ...group, members })
     res.redirect(`/groups`)
   } catch (error) {
@@ -126,6 +126,7 @@ router.post('/groups/:id/delete', isLoggedIn, async (req, res, next) => {
   }
 })
 
+// TODO
 // get add events page of a group
 router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
   try {
