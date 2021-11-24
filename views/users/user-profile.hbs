@@ -1,7 +1,7 @@
 {{! views/users/user-profile.hbs }}
 
 {{! the new version, with the session: }}
-
+<div style="display:flex; flex-direction: col; justify-content:start;;">
 {{#if userInSession}}
   <img
     src="{{userInSession.imagePath}}"
@@ -10,9 +10,14 @@
     height="100px"
   />
   <h2>Welcome, {{userInSession.username}}!</h2>
+  </div>
+  <div style="display:flex; flex-direction: col; justify-content:start;;">
+
   {{#each userInSession.gMember}}
-    <h2>groups{{this.name}}</h2>
+    <h2> </h2>
+      {{> groupPratialGroup}}
   {{/each}}
+</div>
   <p>This is your profile page my friend!</p>
   <button>
     <a href="/userProfile">Reload the page</a>

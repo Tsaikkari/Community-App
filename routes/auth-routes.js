@@ -126,6 +126,5 @@ router.get("/userProfile", isLoggedIn, (req, res) => {
       res.render("users/user-profile", { userInSession })
     );
 });
-
 //*********************************************** */
 module.exports = router;
