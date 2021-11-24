@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const Group = require('../models/Group.model')
+const User = require('../models/User.model')
 
 const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
 
@@ -68,10 +69,18 @@ router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
     const group = await Group.findById(groupId).populate('members')
     const userId = req.session.currentUser._id
 
-    const member = group.members.push(userId)
-   
-    await Group.findByIdAndUpdate(groupId, { ...group, member })
-    res.redirect(`/groups`)
+    const user = await User.findByIdAndUpdate(userId, {
+      $addToSet: { gMember: groupId },
+    });
+    await Group.findByIdAndUpdate(groupId, {
+      $addToSet: { members: userId },
+    });
+
+    res.render("groups/groupDetails", {
+      OurMessege: "You are added to our group",
+      group,
+      user: user.username,
+    });
   } catch (error) {
     next(new Error(error.message))
   }
