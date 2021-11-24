@@ -4,15 +4,6 @@
   {{> groupPartial this}}
   
   <a href="/groups/{{id}}" class="link-btn-groups">View Group</a>
-  {{#each users}}
-    {{#if admin}}
-    <form action="/groups/{{_id}}/delete" method="POST">
-      <button type="submit">Delete this group ❌</button>
-    </form>
-    <form action="/groups/{{_id}}/edit" method="GET">
-      <button type="submit">Update this group</button>
-    </form>
-    {{/if}}
-  {{/each}}
+  
 </div>
 {{/each}}

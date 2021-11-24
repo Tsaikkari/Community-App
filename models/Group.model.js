@@ -1,5 +1,36 @@
 const { Schema, model } = require("mongoose");
 
+const eventSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String
+    },
+    date: {
+      type: Date,
+      retuired: true
+    },
+    time: {
+      type: String,
+      required: true
+    },
+    address: {
+      type: String
+    },
+    groupCreator: {
+      type: Schema.Types.ObjectId,
+      required: true, 
+      ref: 'user'
+    },
+  },
+  {
+    timestamps: true
+  }
+)
+
 const groupSchema = new Schema(
   {
     name: {
@@ -18,13 +49,13 @@ const groupSchema = new Schema(
         ref: 'User'
       }
     ],
+    events: [eventSchema]
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
 );
 
 const Group = model("Group", groupSchema);
 
-module.exports = Group;
+module.exports = Group
