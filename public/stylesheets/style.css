@@ -1,7 +1,7 @@
 /* /* public/stylesheets/style.css */
 body {
   padding: 50px;
-  font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -28,8 +28,8 @@ form button {
   box-sizing: border-box;
   font-size: 14px;
   outline: 0;
-  padding: 4px;
   width: 100%;
+  padding: 4px;
   margin-bottom: 20px;
 }
 
@@ -87,6 +87,19 @@ ul li {
 #form h2 {
   display: flex;
   justify-content: center;
+}
+
+#form > form > div {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+#form > form > div > * {
+  text-align: left;
+}
+#form input[type="radio"] {
+  width: auto;
 }
 
 #to-left {
