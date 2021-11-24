@@ -3,10 +3,6 @@ const mongoose = require("mongoose");
 const { Router } = require("express");
 const router = new Router();
 const User = require("../models/User.model");
-const multer = require("multer");
-const moment = require("moment");
-
-const upload = multer({ dest: "./public/uploads" });
 
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
 
@@ -21,8 +17,7 @@ router.post("/logout", (req, res, next) => {
 //********************************************************************** */
 const bcryptjs = require("bcryptjs");
 const saltRounds = 10;
-router.post("/signup", upload.single("photo"), async (req, res, next) => {
-  console.log(req.body);
+router.post("/signup", (req, res, next) => {
   const {
     username,
     email,
@@ -32,15 +27,11 @@ router.post("/signup", upload.single("photo"), async (req, res, next) => {
     dateOfBirth,
     gender,
   } = req.body;
-  //console.log("xxxxxx",  moment(dateOfBirth).format('L')  );
-  let shortDate = moment(dateOfBirth).format("L");
-  const imagePath =req.file? `/uploads/${req.file.filename}`:'';
 
-  // const { username, email, password } = req.body;
   if (!username || !email || !password) {
     res.render("auth/signup", {
       errorMessage:
-        "Please provide your username, email and password.",
+        "All fields are mandatory. Please provide your username, email and password.",
     });
     return;
   }
@@ -54,6 +45,7 @@ router.post("/signup", upload.single("photo"), async (req, res, next) => {
     return;
   }
   //************************************** */
+
   bcryptjs
     .genSalt(saltRounds)
     .then((salt) => bcryptjs.hash(password, salt))
@@ -63,24 +55,22 @@ router.post("/signup", upload.single("photo"), async (req, res, next) => {
         email: email,
         passwordHash: hashedPassword,
         gender: gender,
-        dateOfBirth: shortDate,
-        imagePath: imagePath,
+        dateOfBirth: dateOfBirth,
       });
     })
     .then((userFromDB) => {
-      console.log("Newly created user is: ", userFromDB);
+      console.log("Newly created user is: *", userFromDB);
+      // let x = (Date.prototype.dataOfBirth = function () {
+      //   return (
+      //     this.getMonth() + 1 + "-" + this.getDate() + "-" + this.getFullYear()
+      //   );
+      // });
+      console.log("Xxxxxiiiiiiiiiiiiiiii");
       res.redirect("/userProfile");
     })
     .catch((error) => {
       if (error instanceof mongoose.Error.ValidationError) {
-        if (error.message.includes("is after maximum allowed value")) {
-          res
-            .status(500)
-            .render("auth/signup", { errorMessage: "BirthDate should be before 2000" });
-        } else
-          res
-            .status(500)
-            .render("auth/signup", { errorMessage: error.message });
+        res.status(500).render("auth/signup", { errorMessage: error.message });
       } else if (error.code === 11000) {
         res.status(500).render("auth/signup", {
           errorMessage:
