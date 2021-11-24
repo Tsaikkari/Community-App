@@ -137,18 +137,20 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
     const group = await Group.findById(groupId)
     console.log('GROUP', group)
 
-    const event = {
+    const event = Event.create({
       name,
       description, 
       date, 
       time,
       address,
       groupCreator: req.session.currentUser._id
-    }
+    }, { new: true })
 
-    group.events.push(event)
-
-    await group.save()
+   
+    const events = await group.events.push(event._id)
+    console.log('EVENTSSSSSSSS_ID', events)
+  
+    await group.save(events)
     res.redirect(`/groups`)
   } catch (error) {
     next(new Error(error.message))
