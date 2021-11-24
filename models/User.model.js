@@ -2,6 +2,13 @@ const { Schema, model } = require("mongoose");
 
 const userSchema = new Schema(
   {
+    gMember:[
+      {
+      type: Schema.Types.ObjectId,
+      ref: 'Group'
+      }
+      ]
+      ,
     imagePath: {
       type: String,
       trim: true,
@@ -34,9 +41,7 @@ const userSchema = new Schema(
       default: false,
     },
     dateOfBirth: {
-      type: Date,
-      max : 2000/11/11
-    },
+      type: Date    },
     gender: {
       type: String,
     },

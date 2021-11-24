@@ -73,11 +73,11 @@ router.post("/signup", upload.single("photo"), async (req, res, next) => {
     })
     .catch((error) => {
       if (error instanceof mongoose.Error.ValidationError) {
-        if (error.message.includes("is after maximum allowed value")) {
-          res
-            .status(500)
-            .render("auth/signup", { errorMessage: "BirthDate should be before 2000" });
-        } else
+        // if (error.message.includes("is after maximum allowed value")) {
+        //   res
+        //     .status(500)
+        //     .render("auth/signup", { errorMessage: "BirthDate should be before 2000" });
+        // } else
           res
             .status(500)
             .render("auth/signup", { errorMessage: error.message });
