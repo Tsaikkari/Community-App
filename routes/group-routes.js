@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
-const Group = require('../models/Group.model')
+const { Group, Event } = require('../models/Group.model')
+
 const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
 
 // get all groups and render
@@ -126,37 +127,37 @@ router.post('/groups/:id/delete', isLoggedIn, async (req, res, next) => {
   }
 })
 
-// TODO
 // get add events page of a group
 router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
   try {
-    const group = await Group.findById(req.params.id)
-    console.log('GRRRROOOOOOUUUUUP', group)
-    res.render('/groups/newGrEvent', { group })
+    const group = await Group.findById(req.params.id).populate('events')
+    res.render('groups/newGrEvent', { group })
   } catch (error) {
     next(new Error('Events not found', error))
   }
 })
 
+// TODO: fix
 // create an event
-router.post('/groups/:id/events', isLoggedIn, async (req, res, next) => {
+router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
   try {
-    const { name, description, date, address } = req.body
-    const id = req.params.id
-
-    const group = await Group.findById(id)
+    const { name, description, date, time, address } = req.body
+    const groupId = req.params.groupId
+    const group = await Group.findById(groupId)
+    console.log('GROUP', group)
 
     const event = {
       name,
       description, 
       date, 
+      time,
       address,
       groupCreator: req.session.currentUser._id
     }
 
     group.events.push(event)
 
-    await group.create(event)
+    await group.save()
     res.redirect(`/groups`)
   } catch (error) {
     next(new Error(error.message))

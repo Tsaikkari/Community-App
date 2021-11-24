@@ -13,6 +13,10 @@ const eventSchema = new Schema(
       type: Date,
       retuired: true
     },
+    time: {
+      type: String,
+      required: true
+    },
     address: {
       type: String
     },
@@ -45,7 +49,12 @@ const groupSchema = new Schema(
         ref: 'User'
       }
     ],
-    events: [eventSchema]
+    events: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Event'
+      }
+    ]
   },
   {
     timestamps: true,
@@ -53,5 +62,6 @@ const groupSchema = new Schema(
 );
 
 const Group = model("Group", groupSchema);
+const Event = model("Event", eventSchema)
 
-module.exports = Group;
+module.exports = { Group, Event }
