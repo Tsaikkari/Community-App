@@ -1,6 +1,22 @@
 <div id="form">
   <h2>Signup</h2>
-  <form action="/signup" method="POST">
+  <form action="/signup" method="post" enctype="multipart/form-data">
+    <div>
+      <input
+        accept="image/*"
+        type="file"
+        id="photo"
+        name="photo"
+        onchange="(function(e){e.currentTarget.nextSibling.nextSibling.src=window.URL.createObjectURL(e.currentTarget.files[0]||'');})(arguments[0])"
+      />
+      <img
+        id="previwImage"
+        src="#"
+        alt="your image"
+        width="100px"
+        height="100px"
+      />
+    </div>
     <div>
       <label>
         Username
@@ -23,7 +39,7 @@
       <label>
         Birthday
       </label>
-      <input type="Date" name="dateOfBirth" />
+      <input type="Date" name="dateOfBirth" vale="12-12-1983"/>
     </div>
     <div style="display: flex; flex-flow:row;justify-content: space-between; ">
       <div style="display:flex; flex-direction: row;">

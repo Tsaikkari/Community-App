@@ -2,6 +2,10 @@ const { Schema, model } = require("mongoose");
 
 const userSchema = new Schema(
   {
+    imagePath: {
+      type: String,
+      trim: true,
+    },
     username: {
       type: String,
       trim: true,
@@ -31,6 +35,7 @@ const userSchema = new Schema(
     },
     dateOfBirth: {
       type: Date,
+      max : 2000/11/11
     },
     gender: {
       type: String,

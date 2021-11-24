@@ -1,17 +1,17 @@
-{{!-- views/users/user-profile.hbs --}}
+{{! views/users/user-profile.hbs }}
 
-{{!-- the new version, with the session: --}}
+{{! the new version, with the session: }}
 
 {{#if userInSession}}
-    <h2>Welcome, {{ userInSession.username }}!</h2>
-    <h1>gender{{ userInSession.gender}}{{ userInSession.dateOfBirth }}</h1>
-    <p>This is your profile page my friend!</p>
-    <button>
-        <a href="/userProfile">Reload the page</a>
-    </button>
-    <button>
-        <a href="/groups">Explore Groups</a>
-    </button>
+  <img src="{{userInSession.imagePath}}" alt="your image" width="100px" height="100px" />
+  <h2>Welcome, {{userInSession.username}}!</h2>
+  <p>This is your profile page my friend!</p>
+  <button>
+    <a href="/userProfile">Reload the page</a>
+  </button>
+  <button>
+    <a href="/groups">Explore Groups</a>
+  </button>
 {{else}}
-    <p>Still no logged in user, sorry!</p>
+  <p>Still no logged in user, sorry!</p>
 {{/if}}

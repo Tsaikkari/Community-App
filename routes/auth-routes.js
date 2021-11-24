@@ -3,40 +3,54 @@ const mongoose = require("mongoose");
 const { Router } = require("express");
 const router = new Router();
 const User = require("../models/User.model");
+const multer = require("multer");
+const moment = require("moment");
 
-const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
- 
-router.get('/signup', isLoggedOut, (req, res) => res.render('auth/signup'));
- 
-router.post('/logout', (req, res, next) => {
-  req.session.destroy(err => {
+const upload = multer({ dest: "./public/uploads" });
+
+const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
+
+router.get("/signup", isLoggedOut, (req, res) => res.render("auth/signup"));
+
+router.post("/logout", (req, res, next) => {
+  req.session.destroy((err) => {
     if (err) next(err);
-    res.redirect('/');
+    res.redirect("/");
   });
 });
 //********************************************************************** */
 const bcryptjs = require("bcryptjs");
 const saltRounds = 10;
-router.post("/signup", (req, res, next) => {
-    const { username, email, password ,isAdmin,isGroupCreator,dateOfBirth,gender} = req.body;
+router.post("/signup", upload.single("photo"), async (req, res, next) => {
+  console.log(req.body);
+  const {
+    username,
+    email,
+    password,
+    isAdmin,
+    isGroupCreator,
+    dateOfBirth,
+    gender,
+  } = req.body;
+  //console.log("xxxxxx",  moment(dateOfBirth).format('L')  );
+  let shortDate = moment(dateOfBirth).format("L");
+  const imagePath =req.file? `/uploads/${req.file.filename}`:'';
 
   // const { username, email, password } = req.body;
   if (!username || !email || !password) {
     res.render("auth/signup", {
       errorMessage:
-        "All fields are mandatory. Please provide your username, email and password.",
+        "Please provide your username, email and password.",
     });
     return;
   }
   //*************************************** */
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
   if (!regex.test(password)) {
-    res
-      .status(500)
-      .render("auth/signup", {
-        errorMessage:
-          "Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter.",
-      });
+    res.status(500).render("auth/signup", {
+      errorMessage:
+        "Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter.",
+    });
     return;
   }
   //************************************** */
@@ -45,11 +59,12 @@ router.post("/signup", (req, res, next) => {
     .then((salt) => bcryptjs.hash(password, salt))
     .then((hashedPassword) => {
       return User.create({
-        username:username,
-        email:email,
+        username: username,
+        email: email,
         passwordHash: hashedPassword,
-        gender:gender,
-        dateOfBirth:dateOfBirth
+        gender: gender,
+        dateOfBirth: shortDate,
+        imagePath: imagePath,
       });
     })
     .then((userFromDB) => {
@@ -58,7 +73,14 @@ router.post("/signup", (req, res, next) => {
     })
     .catch((error) => {
       if (error instanceof mongoose.Error.ValidationError) {
-        res.status(500).render("auth/signup", { errorMessage: error.message });
+        if (error.message.includes("is after maximum allowed value")) {
+          res
+            .status(500)
+            .render("auth/signup", { errorMessage: "BirthDate should be before 2000" });
+        } else
+          res
+            .status(500)
+            .render("auth/signup", { errorMessage: error.message });
       } else if (error.code === 11000) {
         res.status(500).render("auth/signup", {
           errorMessage:
@@ -67,7 +89,7 @@ router.post("/signup", (req, res, next) => {
       } else {
         next(error);
       }
-    }); 
+    });
 });
 //********************************************* */
 router.get("/login", (req, res) => res.render("auth/login"));
@@ -91,23 +113,19 @@ router.post("/login", (req, res, next) => {
         });
         return;
       } else if (bcryptjs.compareSync(password, user.passwordHash)) {
-       
         req.session.currentUser = user;
         res.redirect("/userProfile");
       } else {
         res.render("auth/login", { errorMessage: "Incorrect password." });
       }
-
-      
-      
     })
-    
-    .catch((error) => next(error));
-  });
 
-  router.get('/userProfile', isLoggedIn, (req, res) => {
-    res.render('users/user-profile', { userInSession: req.session.currentUser });
-  });
- 
+    .catch((error) => next(error));
+});
+
+router.get("/userProfile", isLoggedIn, (req, res) => {
+  res.render("users/user-profile", { userInSession: req.session.currentUser });
+});
+
 //*********************************************** */
 module.exports = router;
