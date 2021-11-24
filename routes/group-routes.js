@@ -68,9 +68,9 @@ router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
     const group = await Group.findById(groupId).populate('members')
     const userId = req.session.currentUser._id
 
-    const members = group.members.push(userId)
+    const member = group.members.push(userId)
    
-    await Group.findByIdAndUpdate(groupId, { ...group, members })
+    await Group.findByIdAndUpdate(groupId, { ...group, member })
     res.redirect(`/groups`)
   } catch (error) {
     next(new Error(error.message))
@@ -128,14 +128,12 @@ router.post('/groups/:id/delete', isLoggedIn, async (req, res, next) => {
   }
 })
 
-// TODO: fix
 // create an event
 router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
   try {
     const { name, description, date, time, address } = req.body
     const groupId = req.params.groupId
     const group = await Group.findById(groupId)
-    console.log('GROUP', group)
 
     if (group) {
       const event = {
@@ -152,7 +150,7 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
    
     await group.save()
     
-    res.redirect(`/groups`)
+    res.redirect('/groups')
   } catch (error) {
     next(new Error(error.message))
   }

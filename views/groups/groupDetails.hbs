@@ -9,14 +9,11 @@
     <h2>{{group.name}}</h2>
     <p>{{group.description}}</p>
     <div class='events-div'>
-      {{#if group.events}}
-        <h3>Upcoming events</h3>
+      
         {{#each group.events}}
         {{> eventPartial this}}
         {{/each}}
-      {{else}}
-        <p>No events</p>
-      {{/if}}
+     
     </div>
     <form
       class='join-group-form-btn'
