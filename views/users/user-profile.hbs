@@ -11,7 +11,7 @@
   />
   <h2>Welcome, {{userInSession.username}}!</h2>
   {{#each userInSession.gMember}}
-    <h2>groups{{this}}</h2>
+    <h2>groups{{this.name}}</h2>
   {{/each}}
   <p>This is your profile page my friend!</p>
   <button>

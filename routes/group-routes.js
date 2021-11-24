@@ -15,8 +15,8 @@ router.get("/groups", async (req, res, next) => {
   }
 });
 
-// add new group page
-router.get("/groups/new", async (req, res, next) => {
+// get add new group page
+router.get("/groups/new", isLoggedIn, async (req, res, next) => {
   try {
     res.render("groups/newGroup");
   } catch (error) {
@@ -34,13 +34,14 @@ router.post("/groups", isLoggedIn, async (req, res, next) => {
       next(new Error(`User not found`));
     }
 
-    req.session.currentUser.role === "admin";
+    req.session.currentUser.isGroupCreator = true;
 
     await Group.create({
       members: [id],
       name,
       description,
       image,
+      events: [],
     });
 
     res.redirect("/groups");
@@ -49,6 +50,7 @@ router.post("/groups", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// TODO: search bar
 const findByName = async (groupName) => {
   try {
     const regex = new RegExp(`${groupName}`, "ig");
@@ -60,7 +62,6 @@ const findByName = async (groupName) => {
   }
 };
 
-// TODO: fix
 // add user to group
 router.post("/groups/:id/add", isLoggedIn, async (req, res, next) => {
   try {
@@ -85,9 +86,8 @@ router.post("/groups/:id/add", isLoggedIn, async (req, res, next) => {
   }
 });
 
-// TODO Fix
 // get group detail page
-router.get("/groups/:groupId", async (req, res, next) => {
+router.get("/groups/:groupId", isLoggedIn, async (req, res, next) => {
   const id = req.params.groupId;
   const group = await Group.findById(id).populate("members");
   try {
@@ -98,19 +98,21 @@ router.get("/groups/:groupId", async (req, res, next) => {
 });
 
 // get edit group page
-router.get("/groups/:id/edit", async (req, res, next) => {
+router.get("/groups/:id/edit", isLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id;
     const group = await Group.findById(id);
     res.render("groups/editGroup", { group });
-  } catch (error) {}
+  } catch (error) {
+    next(new Error(error.message));
+  }
 });
 
 // edit group
-router.post("/groups/:id", async (req, res, next) => {
+router.post("/groups/:id", isLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id;
-    const { name, description, image } = req.body;
+    const { name, description, image, events } = req.body;
 
     await Group.findByIdAndUpdate(
       id,
@@ -118,23 +120,62 @@ router.post("/groups/:id", async (req, res, next) => {
         name,
         description,
         image,
+        events,
       },
       { new: true }
     );
-    res.redirect(`/group/${id}`);
+    res.redirect(`/groups`);
   } catch (error) {
     next(new Error(error.message));
   }
 });
 
 // delete group
-router.post("/groups/:id/delete", async (req, res, next) => {
+router.post("/groups/:id/delete", isLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id;
     await Group.findByIdAndRemove(id);
     res.redirect("/groups");
   } catch (error) {
     next(new Error(error.message));
+  }
+});
+
+// create an event
+router.post("/groups/:groupId/events", isLoggedIn, async (req, res, next) => {
+  try {
+    const { name, description, date, time, address } = req.body;
+    const groupId = req.params.groupId;
+    const group = await Group.findById(groupId);
+
+    if (group) {
+      const event = {
+        name,
+        description,
+        date,
+        time,
+        address,
+        groupCreator: req.session.currentUser._id,
+      };
+
+      group.events.push(event);
+    }
+
+    await group.save();
+
+    res.redirect("/groups");
+  } catch (error) {
+    next(new Error(error.message));
+  }
+});
+
+// get add events page of a group
+router.get("/groups/:id/events/new", isLoggedIn, async (req, res, next) => {
+  try {
+    const group = await Group.findById(req.params.id).populate("events");
+    res.render("groups/newGrEvent", { group });
+  } catch (error) {
+    next(new Error("Events not found", error));
   }
 });
 

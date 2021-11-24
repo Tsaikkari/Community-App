@@ -34,13 +34,12 @@ router.post("/signup", upload.single("photo"), async (req, res, next) => {
   } = req.body;
   //console.log("xxxxxx",  moment(dateOfBirth).format('L')  );
   let shortDate = moment(dateOfBirth).format("L");
-  const imagePath =req.file? `/uploads/${req.file.filename}`:'';
+  const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
 
   // const { username, email, password } = req.body;
   if (!username || !email || !password) {
     res.render("auth/signup", {
-      errorMessage:
-        "Please provide your username, email and password.",
+      errorMessage: "Please provide your username, email and password.",
     });
     return;
   }
@@ -78,9 +77,7 @@ router.post("/signup", upload.single("photo"), async (req, res, next) => {
         //     .status(500)
         //     .render("auth/signup", { errorMessage: "BirthDate should be before 2000" });
         // } else
-          res
-            .status(500)
-            .render("auth/signup", { errorMessage: error.message });
+        res.status(500).render("auth/signup", { errorMessage: error.message });
       } else if (error.code === 11000) {
         res.status(500).render("auth/signup", {
           errorMessage:
@@ -123,7 +120,11 @@ router.post("/login", (req, res, next) => {
 });
 
 router.get("/userProfile", isLoggedIn, (req, res) => {
-  res.render("users/user-profile", { userInSession: req.session.currentUser });
+  User.findById(req.session.currentUser)
+    .populate("gMember")
+    .then((userInSession) =>
+      res.render("users/user-profile", { userInSession })
+    );
 });
 
 //*********************************************** */
