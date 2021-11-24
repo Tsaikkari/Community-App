@@ -1,22 +1,28 @@
 <h2>Edit this group</h2>
 {{#with group}}
-<form action="/groups/{{_id}}" method="POST">
-	<label for="name">Name: </label>
-	<input type="text" name="name" id="name" value="{{name}}">
+  <form action='/groups/{{_id}}' method='POST'>
+    <label for='name'>Name: </label>
+    <input type='text' name='name' id='name' value='{{name}}' />
 
-	<label for="description">Description: </label>
-	<input type="text" name="description" id="description" value="{{description}}">
+    <label for='description'>Description: </label>
+    <input
+      type='text'
+      name='description'
+      id='description'
+      value='{{description}}'
+    />
 
-	<label for="image">Upload Image: </label>
-	{{!-- TODO --}}
-	<img type="text" src="" name="image" id="image" value="{{image}}">
-  {{/with}}
-  <label for="events">Events: </label>
-  <ul>
-		<li>
-			{{events}}
-		</li>
-	</ul>
- 
-	<button type="submit">Edit Group</button>
-</form>
+    <label for='image'>Upload Image: </label>
+    {{! TODO }}
+    <img type='text' src='' name='image' id='image' value='{{image}}' />
+
+    <label for='events'>Events: </label>
+    <ul>
+      <li>
+        {{events}}
+      </li>
+    </ul>
+
+    <button type='submit'>Edit Group</button>
+  </form>
+{{/with}}

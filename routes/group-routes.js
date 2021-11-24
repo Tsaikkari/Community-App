@@ -40,6 +40,7 @@ router.post('/groups', isLoggedIn, async (req, res, next) => {
       name, 
       description, 
       image, 
+      events: []
     })
 
     res.redirect('/groups')
@@ -127,16 +128,6 @@ router.post('/groups/:id/delete', isLoggedIn, async (req, res, next) => {
   }
 })
 
-// get add events page of a group
-router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
-  try {
-    const group = await Group.findById(req.params.id).populate('events')
-    res.render('groups/newGrEvent', { group })
-  } catch (error) {
-    next(new Error('Events not found', error))
-  }
-})
-
 // TODO: fix
 // create an event
 router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
@@ -161,6 +152,17 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
     res.redirect(`/groups`)
   } catch (error) {
     next(new Error(error.message))
+  }
+})
+
+// get add events page of a group
+router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
+  try {
+    
+    const group = await Group.findById(req.params.id).populate('events')
+    res.render('groups/newGrEvent', { group })
+  } catch (error) {
+    next(new Error('Events not found', error))
   }
 })
 
