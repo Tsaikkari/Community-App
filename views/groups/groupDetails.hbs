@@ -9,11 +9,9 @@
     <h2>{{group.name}}</h2>
     <p>{{group.description}}</p>
     <div class='events-div'>
-      
-        {{#each group.events}}
+      {{#each group.events}}
         {{> eventPartial this}}
-        {{/each}}
-     
+      {{/each}}
     </div>
     <form
       class='join-group-form-btn'
