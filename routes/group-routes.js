@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { Group, Event } = require('../models/Group.model')
+const Group = require('../models/Group.model')
 
 const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
 
@@ -69,7 +69,7 @@ router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
     const userId = req.session.currentUser._id
 
     const members = group.members.push(userId)
-    
+   
     await Group.findByIdAndUpdate(groupId, { ...group, members })
     res.redirect(`/groups`)
   } catch (error) {
@@ -137,20 +137,21 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
     const group = await Group.findById(groupId)
     console.log('GROUP', group)
 
-    const event = Event.create({
-      name,
-      description, 
-      date, 
-      time,
-      address,
-      groupCreator: req.session.currentUser._id
-    }, { new: true })
+    if (group) {
+      const event = {
+        name,
+        description, 
+        date, 
+        time,
+        address,
+        groupCreator: req.session.currentUser._id
+      }
 
+      group.events.push(event)
+    }
    
-    const events = await group.events.push(event._id)
-    console.log('EVENTSSSSSSSS_ID', events)
-  
-    await group.save(events)
+    await group.save()
+    
     res.redirect(`/groups`)
   } catch (error) {
     next(new Error(error.message))
