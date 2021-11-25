@@ -1,16 +1,16 @@
-<div class='card'>
-  {{#if image}}
-    <img class='group-img' src='{{image}}' alt={{name}} />
-  {{else}}
-    <div class='no-image'>No image</div>
-  {{/if}}
-  <div class='footer'>
-    <h4>{{name}}</h4>
-    <p>{{description}}</p>
-    {{!-- {{#each members}}
-    <ul>
-      <li>{{this.username}}</li>
-    </ul>
-    {{/each}} --}}
+<div class="card" style="min-width: 10rem;">
+  <img
+    class="card-img-top"
+    src="{{image}}"
+    alt="{{name}}"
+    style="width:100px;height:100px;"
+  />
+  <div class="card-body">
+    <h5 class="card-title">{{name}}</h5>
+    <p
+      class="card-text text-truncate"
+      style="max-width: 150px;"
+    >{{description}}</p>
+    <a href="/groups/{{id}}" class="btn btn-primary">View Group</a>
   </div>
 </div>

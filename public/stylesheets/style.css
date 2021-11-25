@@ -1,4 +1,4 @@
-/* /* public/stylesheets/style.css */
+/* public/stylesheets/style.css
 body {
   padding: 50px;
   font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
@@ -228,4 +228,20 @@ ul li {
 
 .containerGroup {
   padding: 2px 16px;
+}
+
+.groups-container {
+  margin: auto;
+  padding-top: 50px;
+  width: 96%;
+}
+.card-wrapper {
+  padding-bottom: 25px;
+}
+.btn {
+  color: #fff;
+}
+.groups-header {
+  padding-top: 1rem;
+  padding-bottom: 3rem;
 }

@@ -1,3 +1,8 @@
+const router = require("express").Router();
+const multer = require("multer");
+const Group = require("../models/Group.model");
+const User = require("../models/User.model");
+
 const router = require('express').Router();
 const multer = require("multer");
 
@@ -7,6 +12,8 @@ const User = require('../models/User.model')
 const upload = multer({ dest: "./public/uploads" });
 
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
+
+const upload = multer({ dest: "./public/uploads" });
 
 // get all groups and render
 router.get("/groups", async (req, res, next) => {
@@ -28,14 +35,41 @@ router.get("/groups/new", isLoggedIn, async (req, res, next) => {
 });
 
 // create a group
+router.post(
+  "/groups",
+  isLoggedIn,
+  upload.single("image"),
+  async (req, res, next) => {
+    try {
+      const { name, description } = req.body;
+      const image = req.file
+        ? `/uploads/${req.file.filename}`
+        : "/images/default-group.png";
+      const id = req.session.currentUser._id;
+
+      if (!id) {
+        next(new Error(`User not found`));
+      }
+
+      req.session.currentUser.isGroupCreator = true;
+
+      await Group.create({
+        members: [id],
+        name,
+        description,
+        image,
+        events: [],
+      });
+      
 router.post('/groups', isLoggedIn, upload.single("photo"), async (req, res, next) => {
   try {
     const { name, description, image } = req.body
     const id = req.session.currentUser._id
     const imagePath =req.file? `/uploads/${req.file.filename}`:'';
 
-    if (!id) {
-      next(new Error(`User not found`));
+      res.redirect("/groups");
+    } catch (error) {
+      next(new Error("Error", error));
     }
 
     req.session.currentUser.isGroupCreator = true;
@@ -53,7 +87,7 @@ router.post('/groups', isLoggedIn, upload.single("photo"), async (req, res, next
   } catch (error) {
     next(new Error("Error", error));
   }
-});
+);
 
 // TODO: search bar
 const findByName = async (groupName) => {
