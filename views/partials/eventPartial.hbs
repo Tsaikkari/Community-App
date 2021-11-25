@@ -1,10 +1,9 @@
 <div class='card'>
   <div class='footer'>
-    <h3>{{name}}</h3>
+    <h2>{{name}}</h2>
     <p>{{description}}</p>
-    <p>When: {{date}}</p>
-    <p>Where: {{address}}</p>
-    <p>Host: {{groupCreator.username}}</p>
+    <p><span class='specs'>When: </span>{{date}}</p>
+    <p><span class='specs'>Where: </span>{{address}}</p>
     {{#each members}}
       <ul>
         <li>{{this.username}}</li>

@@ -1,13 +1,51 @@
 <h2>Create a Group</h2>
-<form action="/groups" method="POST">
-	<label for="name">Name: </label>
-	<input type="text" name="name" id="name">
+<form action="/groups" method="POST" enctype="multipart/form-data">
+  <label for="name">Name: </label>
+  <input type="text" name="name" id="name" />
 
-	<label for="description">Description: </label>
-	<input type="text" name="description" id="description">
+  <label for="description">Description: </label>
+  <input type="text" name="description" id="description" />
 
-	<label for="image">Upload Image: </label>
-	{{!-- TODO --}}
-	<img type="text" src="" name="image" id="image">
-	<button type="submit">Create Group</button>
+  <div>
+    <input
+      accept="image/*"
+      type="file"
+      id="image"
+      name="image"
+      onchange="(function(e){e.currentTarget.nextSibling.nextSibling.src=window.URL.createObjectURL(e.currentTarget.files[0]||'');})(arguments[0])"
+    />
+    <img
+      id="previwImage"
+      src="#"
+      alt="your image"
+      width="100px"
+      height="100px"
+    />
+  </div>
+  <button type="submit">Create Group</button>
+<form id='form' action='/groups' method='POST' enctype='multipart/form-data'>
+  <label for='name'>Name: </label>
+  <input type='text' name='name' id='name' />
+
+  <label for='description'>Description: </label>
+  <input type='text' name='description' id='description' />
+
+  <label for='photo'>Upload Image: </label>
+  <div>
+    <input
+      accept='image/*'
+      type='file'
+      id='photo'
+      name='photo'
+      onchange="(function(e){e.currentTarget.nextSibling.nextSibling.src=window.URL.createObjectURL(e.currentTarget.files[0]||'');})(arguments[0])"
+    />
+    <img
+      id='previwImage'
+      src='#'
+      alt='your image'
+      width='100px'
+      height='100px'
+    />
+  </div>
+  <button type='submit'>Create Group</button>
 </form>

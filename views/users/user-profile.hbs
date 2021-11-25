@@ -1,30 +1,50 @@
 {{! views/users/user-profile.hbs }}
 
 {{! the new version, with the session: }}
-<div style="display:flex; flex-direction: col; justify-content:start;;">
-{{#if userInSession}}
-  <img
-    src="{{userInSession.imagePath}}"
-    alt="your image"
-    width="100px"
-    height="100px"
-  />
-  <h2>Welcome, {{userInSession.username}}!</h2>
-  </div>
-  <div style="display:flex; flex-direction: col; justify-content:start;;">
+<div class="container">
+  {{#if userInSession}}
+  <div class="row">
+    <div class="card">
 
+      <img
+        class="card-img-top"
+        src="{{userInSession.imagePath}}"
+        width="200px"
+        height="200px"
+        alt="Profile Image"
+      />
+      <div class="card-body">
+        <h5 class="card-title">Welcome, {{userInSession.username}}!</h5>
+        <p class="card-text">{{userInSession.email}}</p>
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseGroups" role="button" aria-expanded="false" aria-controls="collapseGroups">
+          My Groups
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container groups collapse" id="collapseGroups">
+    <hr/>
+    <div class="row row-cols-3 row-cols-sm-1 row-cols-md-2">
+      {{#each userInSession.gMember}}
+        <div class="col" >
+          {{> groupPartial this}}
+        </div>
+      {{/each}}
+    </div>
+  </div>
+
+  {{else}}
+    <p>Still no logged in user, sorry!</p>
+  {{/if}}
+</div>
   {{#each userInSession.gMember}}
     <h2> </h2>
       {{> groupPratialGroup}}
   {{/each}}
 </div>
   <p>This is your profile page my friend!</p>
-  <button>
-    <a href="/userProfile">Reload the page</a>
-  </button>
-  <button>
-    <a href="/groups">Explore Groups</a>
-  </button>
 {{else}}
   <p>Still no logged in user, sorry!</p>
 {{/if}}
+
