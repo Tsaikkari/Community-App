@@ -1,6 +1,6 @@
 <h2>Edit this group</h2>
 {{#with group}}
-  <form action='/groups/{{_id}}' method='POST'>
+  <form id='form' action='/groups/{{_id}}' method='POST'>
     <label for='name'>Name: </label>
     <input type='text' name='name' id='name' value='{{name}}' />
 

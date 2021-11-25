@@ -1,18 +1,23 @@
 {{! views/users/user-profile.hbs }}
 
 {{! the new version, with the session: }}
-
+<div style="display:flex; flex-direction: col; justify-content:start;;">
 {{#if userInSession}}
   <img
-    src='{{userInSession.imagePath}}'
-    alt='your image'
-    width='100px'
-    height='100px'
+    src="{{userInSession.imagePath}}"
+    alt="your image"
+    width="100px"
+    height="100px"
   />
   <h2>Welcome, {{userInSession.username}}!</h2>
+  </div>
+  <div style="display:flex; flex-direction: col; justify-content:start;;">
+
   {{#each userInSession.gMember}}
-    <h2>groups{{this}}</h2>
+    <h2> </h2>
+      {{> groupPratialGroup}}
   {{/each}}
+</div>
   <p>This is your profile page my friend!</p>
 {{else}}
   <p>Still no logged in user, sorry!</p>
