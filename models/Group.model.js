@@ -42,6 +42,11 @@ const groupSchema = new Schema(
       required: true,
     },
     image: String,
+    creator: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "user",
+    },
     members: [
       {
         type: Schema.Types.ObjectId,

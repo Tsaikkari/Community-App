@@ -1,26 +1,58 @@
 <h2>Create a Group</h2>
 <form action="/groups" method="POST" enctype="multipart/form-data">
-  <label for="name">Name: </label>
-  <input type="text" name="name" id="name" />
 
-  <label for="description">Description: </label>
-  <input type="text" name="description" id="description" />
+  <div class="input-group mb-3" style="position: relative; margin-top: 120px;">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Upload</span>
+    </div>
+    <div class="custom-file">
+      <input
+        accept="image/*"
+        type="file"
+        id="image"
+        name="image"
+        onchange="(function(e){e.currentTarget.nextSibling.nextSibling.src=window.URL.createObjectURL(e.currentTarget.files[0]||'');})(arguments[0])"
+      />
+      <img
+        style="position: absolute; top:-110px;  "
+        id="previwImage"
+        src="#"
+        alt="your image"
+        width="100px"
+        height="100px"
+      />
+      <label class="custom-file-label" for="image">Choose Picture</label>
+    </div>
+  </div>
 
-  <div>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        name
+      </span>
+    </div>
     <input
-      accept="image/*"
-      type="file"
-      id="image"
-      name="image"
-      onchange="(function(e){e.currentTarget.nextSibling.nextSibling.src=window.URL.createObjectURL(e.currentTarget.files[0]||'');})(arguments[0])"
-    />
-    <img
-      id="previwImage"
-      src="#"
-      alt="your image"
-      width="100px"
-      height="100px"
+      class="form-control"
+      type="text"
+      name="name"
+      placeholder="group Name"
     />
   </div>
-  <button type="submit">Create Group</button>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        description
+      </span>
+    </div>
+    <input
+      class="form-control"
+      type="text"
+      name="description"
+      placeholder="group description"
+    />
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-lg">Create Group</button>
+
 </form>

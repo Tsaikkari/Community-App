@@ -1,50 +1,88 @@
-<h1>Group Details</h1>
-{{username}}{{OurMessege}}
-<div class='card'>
+<div class="card mb-3">
+  <h5>{{username}}{{OurMessege}}</h5>
   {{#if group.image}}
-    <img class='group-img' src='{{group.image}}' alt={{group.name}} />
+    <img
+      class="card-img-top"
+      src="{{group.image}}"
+      alt={{group.name}}
+      height="200px"
+      width="200px"
+    />
   {{else}}
-    <div class='no-image'>No image</div>
+    <img
+      class="card-img-top"
+      src="/images/default.png"
+      alt={{group.name}}
+      height="200px"
+    />
   {{/if}}
-  <div class='footer'>
-    <h2>{{group.name}}</h2>
-    <p>{{group.description}}</p>
-    <div class='events-div'>
+  <div class="card-body">
+    <h5 class="card-title">{{group.name}}</h5>
+    <p class="card-text">{{group.description}}</p>
+
+
+    <div class='card-text events-div'>
+      <hr/>
+      <h4> Events:</h4>
       {{#each group.events}}
         {{> eventPartial this}}
       {{/each}}
     </div>
-    <form
-      class='join-group-form-btn'
-      action='/groups/{{group._id}}/add'
-      method='POST'
-    >
-      <button type='submit'>Join this group</button>
-    </form>
-    <form action="/groups/{{group._id}}/events/new" method="GET">
-      <button type="submit">Create an Event</button>
-    </form>
-    <form action="/groups/{{group._id}}/edit" method="GET">
-      <button type="submit">Update this group</button>
-    </form>
-    <form action="/groups/{{group._id}}/delete" method="POST">
-      <button type="submit">Delete this group ❌</button>
-    </form>
-    {{#if group.groupCreator}}
-    <form action="/groups/{{group._id}}/events/new" method="GET">
-      <button type="submit">Create an Event</button>
-    </form>
-    <form action="/groups/{{group._id}}/edit" method="GET">
-      <button type="submit">Update this group</button>
-    </form>
-    <form action="/groups/{{group._id}}/delete" method="POST">
-      <button type="submit">Delete this group ❌</button>
-    </form>
-  {{/if}}
-    {{#each group.members}}
-      <ul>
-        <li>{{this.username}}</li>
+
+    <div class='card-text'>
+      <hr/>
+      <h4> Group Members:</h4>
+      <ul style="display: flex; flex-flow:row wrap;">
+        {{#each group.members}}
+          <li class="btn btn-outline-success" style="margin:5px">
+            {{this.username}}
+          </li>
+        {{/each}}
       </ul>
-    {{/each}}
+    </div>
+
+    <div >
+      <hr/>
+      <h4> Actions:</h4>
+      <form class="btn btn-primary"
+          action='/groups/{{group._id}}/add'
+          method='POST'
+        >
+        <button type="submit" class="btn btn-primary">
+            Join this group
+        </button>
+      </form>
+
+      {{#if isAdmin}}
+      <form class="btn btn-primary"
+          action="/groups/{{group._id}}/events/new"
+          method='GET'
+        >
+        <button type="submit" class="btn btn-primary">
+        Create an Event
+        </button>
+      </form>
+
+      <form class="btn btn-primary"
+          action="/groups/{{group._id}}/edit"
+          method='GET'
+        >
+        <button type="submit" class="btn btn-primary">
+          Edit this group        
+        </button>
+      </form>
+
+
+      
+    <form class="btn btn-primary"
+      action="/groups/{{group._id}}/delete" 
+      method="POST">
+      <button type="submit" class="btn btn-primary">
+            Delete this group ❌
+      </button>
+    </form>
+      {{/if}}
+    </div>
+
   </div>
 </div>
