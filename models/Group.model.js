@@ -1,42 +1,41 @@
 const { Schema, model } = require("mongoose");
-
 const eventSchema = new Schema(
   {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
-      type: String
+      type: String,
     },
     date: {
       type: Date,
-      retuired: true
+      retuired: true,
     },
     time: {
       type: String,
-      required: true
+      required: true,
     },
     address: {
-      type: String
+      type: String,
     },
     groupCreator: {
       type: Schema.Types.ObjectId,
-      required: true, 
-      ref: 'user'
+      required: true,
+      ref: "user",
     },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
-)
+);
 
 const groupSchema = new Schema(
   {
     name: {
       type: String,
       unique: true,
-      required: true
+      required: true,
     },
     description: {
       type: String,
@@ -46,10 +45,10 @@ const groupSchema = new Schema(
     members: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'User'
-      }
+        ref: "User",
+      },
     ],
-    events: [eventSchema]
+    events: [eventSchema],
   },
   {
     timestamps: true,
@@ -58,4 +57,4 @@ const groupSchema = new Schema(
 
 const Group = model("Group", groupSchema);
 
-module.exports = Group
+module.exports = Group;
