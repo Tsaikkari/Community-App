@@ -34,7 +34,9 @@ router.post("/signup", upload.single("photo"), async (req, res, next) => {
   } = req.body;
   //console.log("xxxxxx",  moment(dateOfBirth).format('L')  );
   let shortDate = moment(dateOfBirth).format("L");
-  const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
+  const imagePath = req.file
+    ? `/uploads/${req.file.filename}`
+    : "/images/avatar.png";
 
   // const { username, email, password } = req.body;
   if (!username || !email || !password) {
