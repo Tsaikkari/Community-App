@@ -19,7 +19,7 @@ const upload = multer({ dest: "./public/uploads" });
 router.get("/groups", async (req, res, next) => {
   try {
     const groups = await Group.find();
-    res.render("groups/index", { groups });
+    res.render("groups/index", { groups, user: req.session.currentUser });
   } catch (error) {
     next(new Error("No groups", error));
   }
@@ -53,8 +53,9 @@ router.post(
 
       req.session.currentUser.isGroupCreator = true;
 
-      await Group.create({
+      const group = await Group.create({
         members: [id],
+        creator: id,
         name,
         description,
         image,
@@ -67,7 +68,11 @@ router.post('/groups', isLoggedIn, upload.single("photo"), async (req, res, next
     const id = req.session.currentUser._id
     const imagePath =req.file? `/uploads/${req.file.filename}`:'';
 
-      res.redirect("/groups");
+      const user = await User.findByIdAndUpdate(id, {
+        $addToSet: { gMember: group._id },
+      });
+
+      res.redirect(`/groups/${group._id}`);
     } catch (error) {
       next(new Error("Error", error));
     }
@@ -115,11 +120,7 @@ router.post("/groups/:id/add", isLoggedIn, async (req, res, next) => {
       $addToSet: { members: userId },
     });
 
-    res.render("groups/groupDetails", {
-      OurMessege: "You are added to our group",
-      group,
-      user: user.username,
-    });
+    res.redirect(`/groups/${groupId}`);
   } catch (error) {
     next(new Error("Group not found", error));
   }
@@ -128,11 +129,12 @@ router.post("/groups/:id/add", isLoggedIn, async (req, res, next) => {
 // get group detail page
 router.get('/groups/:groupId', isLoggedIn, async (req, res, next) => {
   try {
-    const id = req.params.groupId
-    const group = await Group.findById(id).populate('members')
-    const user = req.session.currentUser
-    
-    res.render('groups/groupDetails', { group, isGroupCreator: user.isGroupCreator })
+    res.render("groups/groupDetails", {
+      group,
+      user: req.session.currentUser,
+      isAdmin:
+        req.session.currentUser && req.session.currentUser._id == group.creator,
+    });
   } catch (error) {
     next(new Error("Group not found", error));
   }
