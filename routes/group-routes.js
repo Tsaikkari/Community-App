@@ -2,15 +2,6 @@ const router = require("express").Router();
 const multer = require("multer");
 const Group = require("../models/Group.model");
 const User = require("../models/User.model");
-
-const router = require('express').Router();
-const multer = require("multer");
-
-const Group = require('../models/Group.model')
-const User = require('../models/User.model')
-
-const upload = multer({ dest: "./public/uploads" });
-
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
 
 const upload = multer({ dest: "./public/uploads" });
@@ -61,36 +52,11 @@ router.post(
         image,
         events: [],
       });
-      
-router.post('/groups', isLoggedIn, upload.single("photo"), async (req, res, next) => {
-  try {
-    const { name, description, image } = req.body
-    const id = req.session.currentUser._id
-    const imagePath =req.file? `/uploads/${req.file.filename}`:'';
-
-      const user = await User.findByIdAndUpdate(id, {
-        $addToSet: { gMember: group._id },
-      });
 
       res.redirect(`/groups/${group._id}`);
     } catch (error) {
       next(new Error("Error", error));
     }
-
-    req.session.currentUser.isGroupCreator = true;
-
-    await Group.create({
-      members: [id],
-      name, 
-      description, 
-      image, 
-      events: [],
-      imagePath: imagePath,
-    })
-
-    res.redirect("/groups");
-  } catch (error) {
-    next(new Error("Error", error));
   }
 );
 
@@ -109,9 +75,9 @@ const findByName = async (groupName) => {
 // add user to group
 router.post("/groups/:id/add", isLoggedIn, async (req, res, next) => {
   try {
-    const groupId = req.params.id
-    const group = await Group.findById(groupId).populate('members')
-    const userId = req.session.currentUser._id
+    const groupId = req.params.id;
+    const group = await Group.findById(groupId).populate("members");
+    const userId = req.session.currentUser._id;
 
     const user = await User.findByIdAndUpdate(userId, {
       $addToSet: { gMember: groupId },
@@ -127,8 +93,11 @@ router.post("/groups/:id/add", isLoggedIn, async (req, res, next) => {
 });
 
 // get group detail page
-router.get('/groups/:groupId', isLoggedIn, async (req, res, next) => {
+router.get("/groups/:groupId", isLoggedIn, async (req, res, next) => {
   try {
+    const groupId = req.params.groupId;
+    const group = await Group.findById(groupId).populate("members");
+
     res.render("groups/groupDetails", {
       group,
       user: req.session.currentUser,
@@ -151,25 +120,34 @@ router.get("/groups/:id/edit", isLoggedIn, async (req, res, next) => {
   }
 });
 
-// edit group
-router.post("/groups/:id", isLoggedIn, async (req, res, next) => {
-  try {
-    const id = req.params.id
-    const { name, description, image, events } = req.body
-    const imagePath =req.file? `/uploads/${req.file.filename}`:'';
+// update group
+router.post(
+  "/groups/:id",
+  isLoggedIn,
+  upload.single("image"),
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const { name, description, image, events } = req.body;
+      const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
 
-    await Group.findByIdAndUpdate(id, {
-      name,
-      description, 
-      image,
-      events,
-      imagePath: imagePath
-    }, { new: true })
-    res.redirect(`/groups`)
-  } catch (error) {
-    next(new Error(error.message));
+      await Group.findByIdAndUpdate(
+        id,
+        {
+          name,
+          description,
+          image,
+          events,
+          imagePath: imagePath,
+        },
+        { new: true }
+      );
+      res.redirect(`/groups/${id}`);
+    } catch (error) {
+      next(new Error(error.message));
+    }
   }
-});
+);
 
 // delete group
 router.post("/groups/:id/delete", isLoggedIn, async (req, res, next) => {
@@ -204,7 +182,7 @@ router.post("/groups/:groupId/events", isLoggedIn, async (req, res, next) => {
 
     await group.save();
 
-    res.redirect("/groups");
+    res.redirect(`/groups/${groupId}`);
   } catch (error) {
     next(new Error(error.message));
   }
