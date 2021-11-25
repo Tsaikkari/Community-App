@@ -55,6 +55,44 @@
       {{{body}}}
     </div>
     <script src="/js/script.js"></script>
+<html lang='en'>
+
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta http-equiv='X-UA-Compatible' content='ie=edge' />
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+  <body>
+    <nav>
+      <ul>
+        <li id='to-left'>
+          <p><a href='/'>GetTogether</a></p>
+        </li>
+        <li id='to-right'>
+          <a class='nav-links' href='/signup'>Signup</a>
+          <a class='nav-links' href='/login'>Login</a>
+          <a class='nav-links' href='/groups'>Groups</a>
+          <a class='nav-links' href='/userProfile'>Profile</a>
+          <form
+            id='form-logout-btn'
+            class='button'
+            action='/logout'
+            method='POST'
+          >
+            <button>Logout</button>
+          </form>
+
+          {{! !!! }}
+
+        </li>
+      </ul>
+    </nav>
+    {{{body}}}
+
+    <script src='/js/script.js'></script>
   </body>
 
 </html>
