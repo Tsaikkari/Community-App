@@ -3,14 +3,22 @@
 {{! the new version, with the session: }}
 
 {{#if userInSession}}
-  <img src="{{userInSession.imagePath}}" alt="your image" width="100px" height="100px" />
+  <img
+    src='{{userInSession.imagePath}}'
+    alt='your image'
+    width='100px'
+    height='100px'
+  />
   <h2>Welcome, {{userInSession.username}}!</h2>
+  {{#each userInSession.gMember}}
+    <h2>groups{{this}}</h2>
+  {{/each}}
   <p>This is your profile page my friend!</p>
   <button>
-    <a href="/userProfile">Reload the page</a>
+    <a href='/userProfile'>Reload the page</a>
   </button>
   <button>
-    <a href="/groups">Explore Groups</a>
+    <a href='/groups'>Explore Groups</a>
   </button>
 {{else}}
   <p>Still no logged in user, sorry!</p>

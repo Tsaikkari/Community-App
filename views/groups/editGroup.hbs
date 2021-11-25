@@ -12,16 +12,23 @@
       value='{{description}}'
     />
 
-    <label for='image'>Upload Image: </label>
-    {{! TODO }}
-    <img type='text' src='' name='image' id='image' value='{{image}}' />
-
-    <label for='events'>Events: </label>
-    <ul>
-      <li>
-        {{events}}
-      </li>
-    </ul>
+    <label for='photo'>Upload Image: </label>
+    <div>
+      <input
+        accept='image/*'
+        type='file'
+        id='photo'
+        name='photo'
+        onchange="(function(e){e.currentTarget.nextSibling.nextSibling.src=window.URL.createObjectURL(e.currentTarget.files[0]||'');})(arguments[0])"
+      />
+      <img
+        id='previwImage'
+        src='#'
+        alt='your image'
+        width='100px'
+        height='100px'
+      />
+    </div>
 
     <button type='submit'>Edit Group</button>
   </form>

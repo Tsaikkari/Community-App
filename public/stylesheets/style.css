@@ -1,58 +1,163 @@
 /* /* public/stylesheets/style.css */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /* display: flex;
+  flex-direction: column;
+  padding: 0 20px; */
+  //background: #2e183b;
+  color: #fff;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00b7ff;
+// navbar
+.navbar-light .navbar-nav .nav-link {
+  color: #000;
+  font-family: Helvetica, Arial, sans-serif;
+  padding: 15px;
+}
+
+.navbar {
+  background-color: #c2c0cf !important;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.navbar a:hover {
+  color: #2b2b45;
   text-decoration: none;
-  font-size: 1.5em;
 }
 
-form {
+.navbar-brand {
+  padding-left: 1rem;
+}
+
+#logout-form button {
+  background: #eee;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  color: #000;
+  cursor: pointer;
+  font-size: 17px;
+  padding: 0 15px;
+  margin: 0 15px;
+  transition: 0.3s ease background;
+}
+
+footer {
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem;
+}
+
+footer p {
+  color: #ccc;
+}
+
+/* .main {
+  display: flex;
+  flex: 1;
+}
+
+.side-nav {
+  flex: 1 1 5rem;
+  padding: 0 1rem;
+  font-size: 20px;
+}
+
+.join-group-btn {
+  margin-top: 3rem;
+}
+
+.events-div .specs {
+  color: #c2c0cf;
+}
+
+.article {
+  flex: 3 3;
+  text-align: center;
+}
+
+.article p {
+  font-size: 30px;
+}
+
+.group-img {
+  width: 350px;
+  margin: 3rem 0 1.5rem;
+}
+
+.group-name {
+  font-size: 60px;
+  color: #eeaef5;
+}
+
+.aside {
+  flex: 1 1 5rem;
+}
+
+.members {
+  font-size: 80px;
+  font-weight: 900;
+}
+
+.group-members-div {
+  padding-top: 1.6rem;
+}
+
+.group-members-div li {
+  font-size: 40px;
+} */
+
+#form {
   margin: 30px auto;
   width: 380px;
 }
 
-form label {
+#form label {
   color: #666;
   display: inline-block;
   margin-bottom: 10px;
-  text-align: center;
+  //text-align: center;
   width: 100%;
 }
 
-form input,
-form button {
+#form input,
+#form button {
   box-sizing: border-box;
   font-size: 14px;
   outline: 0;
   width: 100%;
   padding: 4px;
   margin-bottom: 20px;
-}
+} 
 
-form button {
-  background: #43a3e6;
-  border: 1px solid #43a3e6;
+#form button {
+  background: #eee;
+  border: 1px solid #eee;
   border-radius: 4px;
-  color: #fff;
+  color: #000;
   cursor: pointer;
   display: inline-block;
-  font-size: 14px;
-  padding: 8px 16px;
+  font-size: 17px;
+  padding: 21px 16px;
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.3s ease background;
   width: 100%;
 }
 
-form button:hover {
-  background: #fff;
-  color: #43a3e6;
+#form button:hover {
+  background: #b8b5ff;
+  color: #fff;
+  border: none;
   transition: 0.3s ease background;
-}
+} 
 
 .error {
   background: #f02b63;
@@ -61,27 +166,6 @@ form button:hover {
   margin: 20px auto;
   padding: 20px;
   width: 100%;
-}
-
-ul {
-  border-bottom: 2px solid #43a3e6;
-  height: 30px;
-  padding: 1em 0;
-  list-style-type: none;
-}
-
-ul li {
-  line-height: 20px;
-}
-
-#to-right {
-  padding: 1em;
-  float: right;
-}
-
-#to-right span {
-  color: #43a3e6;
-  font-size: 1.5em;
 }
 
 #form h2 {
@@ -98,24 +182,6 @@ ul li {
 #form > form > div > * {
   text-align: left;
 }
-#form input[type="radio"] {
+#form input[type='radio'] {
   width: auto;
-}
-
-#to-left {
-  float: left;
-}
-
-#to-left p a {
-  color: #000;
-  font-weight: bold;
-  font-size: 2em;
-}
-
-#logout-form {
-  display: inline;
-}
-
-#logout-form button {
-  width: 120px;
-}
+} */

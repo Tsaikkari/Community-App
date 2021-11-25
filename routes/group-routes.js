@@ -1,7 +1,10 @@
 const router = require('express').Router();
+const multer = require("multer");
 
 const Group = require('../models/Group.model')
 const User = require('../models/User.model')
+
+const upload = multer({ dest: "./public/uploads" });
 
 const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
 
@@ -25,10 +28,11 @@ router.get('/groups/new', isLoggedIn, async (req, res, next) => {
 })
 
 // create a group
-router.post('/groups', isLoggedIn, async (req, res, next) => {
+router.post('/groups', isLoggedIn, upload.single("photo"), async (req, res, next) => {
   try {
     const { name, description, image } = req.body
     const id = req.session.currentUser._id
+    const imagePath =req.file? `/uploads/${req.file.filename}`:'';
 
     if (!id) {
       next(new Error(`User not found`))
@@ -41,7 +45,8 @@ router.post('/groups', isLoggedIn, async (req, res, next) => {
       name, 
       description, 
       image, 
-      events: []
+      events: [],
+      imagePath: imagePath,
     })
 
     res.redirect('/groups')
@@ -88,10 +93,12 @@ router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
 
 // get group detail page
 router.get('/groups/:groupId', isLoggedIn, async (req, res, next) => {
-  const id = req.params.groupId
-  const group = await Group.findById(id).populate('members')
   try {
-    res.render('groups/groupDetails', { group })
+    const id = req.params.groupId
+    const group = await Group.findById(id).populate('members')
+    const user = req.session.currentUser
+    
+    res.render('groups/groupDetails', { group, isGroupCreator: user.isGroupCreator })
   } catch (error) {
     next(new Error('Group not found', error))
   }
@@ -113,12 +120,14 @@ router.post('/groups/:id', isLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id
     const { name, description, image, events } = req.body
-   
+    const imagePath =req.file? `/uploads/${req.file.filename}`:'';
+
     await Group.findByIdAndUpdate(id, {
       name,
       description, 
       image,
-      events
+      events,
+      imagePath: imagePath
     }, { new: true })
     res.redirect(`/groups`)
   } catch (error) {
