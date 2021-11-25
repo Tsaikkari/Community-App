@@ -1,26 +1,27 @@
-require('dotenv/config');
-require('./db');
-const express = require('express');
-const hbs = require('hbs');
+require("dotenv/config");
+require("./db");
+const express = require("express");
+const hbs = require("hbs");
 
 const app = express();
 
-hbs.registerPartials(__dirname + '/views/partials/');
+hbs.registerPartials(__dirname + "/views/partials/");
 
 // ℹ️ This function is getting exported from the config folder. It runs most middlewares
-require('./config')(app);
+require("./config")(app);
 
 // default value for title local
-const projectName = 'lab-express-basic-auth';
-const capitalized = string => string[0].toUpperCase() + string.slice(1).toLowerCase();
+const projectName = "lab-express-basic-auth";
+const capitalized = (string) =>
+  string[0].toUpperCase() + string.slice(1).toLowerCase();
 
 app.locals.title = `${capitalized(projectName)}- Generated with Ironlauncher`;
 
 // session config
-const session = require('express-session');
-const MongoStore = require('connect-mongo')
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 
-const DB_URL = process.env.MONGODB_URI
+const DB_URL = process.env.MONGODB_URI;
 
 app.use(
   session({
@@ -29,26 +30,28 @@ app.use(
     resave: true,
     saveUninitialized: false,
     store: MongoStore.create({
-      mongoUrl: DB_URL
-    })
+      mongoUrl: DB_URL,
+    }),
   })
-)
+);
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
 
 // 👇 Start handling routes here
-const index = require('./routes/index');
-const authRouter = require('./routes/auth-routes'); 
-const groupRouter = require('./routes/group-routes');
+const index = require("./routes/index");
+const authRouter = require("./routes/auth-routes");
+const groupRouter = require("./routes/group-routes");
 
-app.use('/', index);
-app.use('/', authRouter);
-app.use('/', groupRouter)
-
+app.use("/", index);
+app.use("/", authRouter);
+app.use("/", groupRouter);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
-require('./error-handling')(app);
+require("./error-handling")(app);
 
 module.exports = app;
-
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

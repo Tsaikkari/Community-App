@@ -12,7 +12,7 @@ const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
 
 router.get("/signup", isLoggedOut, (req, res) => res.render("auth/signup"));
 
-router.post("/logout", (req, res, next) => {
+router.get("/logout", (req, res, next) => {
   req.session.destroy((err) => {
     if (err) next(err);
     res.redirect("/");
@@ -89,7 +89,10 @@ router.post("/signup", upload.single("photo"), async (req, res, next) => {
     });
 });
 //********************************************* */
-router.get("/login", (req, res) => res.render("auth/login"));
+router.get("/login", (req, res) => {
+  req.app.locals.title = "login  Profile";
+  res.render("auth/login");
+});
 //********************************************* */
 router.post("/login", (req, res, next) => {
   console.log("SESSION =====> ", req.session);
@@ -120,6 +123,7 @@ router.post("/login", (req, res, next) => {
 });
 
 router.get("/userProfile", isLoggedIn, (req, res) => {
+  req.app.locals.title = "user Profile";
   User.findById(req.session.currentUser)
     .populate("gMember")
     .then((userInSession) =>
