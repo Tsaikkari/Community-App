@@ -24,6 +24,10 @@ const eventSchema = new Schema(
       required: true,
       ref: "user",
     },
+    imagePath: {
+      type: String,
+      trim: true,
+    }
   },
   {
     timestamps: true,

@@ -17,6 +17,7 @@ nav {
 }
 .nav-link:hover {
   color: yellow;
+
 }
 .box {
   z-index: -1;
