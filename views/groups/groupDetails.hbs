@@ -3,23 +3,27 @@
   <nav class="side-nav">
     {{#if isGroupCreator }}
       <form action="/groups/{{group._id}}/events/new" method="GET">
-        <button type="submit">Create an Event</button>
+        <button class="button" type="submit">Create an Event</button>
       </form>
       <form action="/groups/{{group._id}}/edit" method="GET">
-        <button type="submit">Update this group</button>
+        <button class="button" type="submit">Update this group</button>
       </form>
       <form action="/groups/{{group._id}}/delete" method="POST">
-        <button type="submit">Delete this group ❌</button>
+        <button class="button" type="submit">Delete this group ❌</button>
       </form>
+      <div class='events-div'>
+      {{#each group.events}}
+        {{> eventPartial this}}
+      {{/each}}
+    </div>
     {{else}}
       <form
-        class='join-group-btn'
+        class='join-group-btn button'
         action='/groups/{{group._id}}/add'
         method='POST'
       >
       <button type='submit'>Join this group</button>
-    </form>
-    <div class='events-div'>
+    </form><div class='events-div'>
       {{#each group.events}}
         {{> eventPartial this}}
       {{/each}}
