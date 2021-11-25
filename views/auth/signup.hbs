@@ -1,64 +1,64 @@
-<div id="form">
+<div id='form'>
   <h2>Signup</h2>
-  <form action="/signup" method="post" enctype="multipart/form-data">
+  <form action='/signup' method='post' enctype='multipart/form-data'>
     <div>
       <input
-        accept="image/*"
-        type="file"
-        id="photo"
-        name="photo"
+        accept='image/*'
+        type='file'
+        id='photo'
+        name='photo'
         onchange="(function(e){e.currentTarget.nextSibling.nextSibling.src=window.URL.createObjectURL(e.currentTarget.files[0]||'');})(arguments[0])"
       />
       <img
-        id="previwImage"
-        src="#"
-        alt="your image"
-        width="100px"
-        height="100px"
+        id='previwImage'
+        src='#'
+        alt='your image'
+        width='100px'
+        height='100px'
       />
     </div>
     <div>
       <label>
         Username
       </label>
-      <input type="text" name="username" placeholder="ironhacker" />
+      <input type='text' name='username' placeholder='ironhacker' />
     </div>
     <div>
       <label>
         Email
       </label>
-      <input type="email" name="email" placeholder="rockstar@ironhack.com" />
+      <input type='email' name='email' placeholder='rockstar@ironhack.com' />
     </div>
     <div>
       <label>
         Password
       </label>
-      <input type="password" name="password" placeholder="********" />
+      <input type='password' name='password' placeholder='********' />
     </div>
     <div>
       <label>
         Birthday
       </label>
-      <input type="Date" name="dateOfBirth" vale="12-12-1983"/>
+      <input type='Date' name='dateOfBirth' vale='12-12-1983' />
     </div>
-    <div style="display: flex; flex-flow:row;justify-content: space-between; ">
-      <div style="display:flex; flex-direction: row;">
-        <input type="radio" id="male" name="gender" value="1" />
-        <label for="male">male</label>
+    <div style='display: flex; flex-flow:row;justify-content: space-between; '>
+      <div style='display:flex; flex-direction: row;'>
+        <input type='radio' id='male' name='gender' value='1' />
+        <label for='male'>male</label>
       </div>
-      <div style="display:flex; flex-direction: row;">
-        <input type="radio" id="fmale" name="gender" value="2" />
-        <label for="age2">female</label>
+      <div style='display:flex; flex-direction: row;'>
+        <input type='radio' id='fmale' name='gender' value='2' />
+        <label for='age2'>female</label>
       </div>
-      <div style="display:flex; flex-direction: row;">
-        <input type="radio" id="other" name="gender" value="3" />
-        <label for="other">other</label>
+      <div style='display:flex; flex-direction: row;'>
+        <input type='radio' id='other' name='gender' value='3' />
+        <label for='other'>other</label>
       </div>
     </div>
-    <button type="submit">Create account</button>
+    <button type='submit'>Create account</button>
 
   </form>
 </div>
 {{#if errorMessage}}
-  <p class="error">{{errorMessage}}</p>
+  <p class='error'>{{errorMessage}}</p>
 {{/if}}
