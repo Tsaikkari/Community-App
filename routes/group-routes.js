@@ -1,14 +1,16 @@
-const router = require('express').Router()
-const multer = require('multer')
-const Group = require('../models/Group.model')
-const User = require('../models/User.model')
-const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js')
-const upload = multer({ dest: './public/uploads' })
+const router = require("express").Router();
+const multer = require("multer");
+const Group = require("../models/Group.model");
+const User = require("../models/User.model");
+const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
+
+const upload = multer({ dest: "./public/uploads" });
+
 // get all groups and render
 router.get('/groups', async (req, res, next) => {
   try {
-    const groups = await Group.find()
-    res.render('groups/index', { groups })
+    const groups = await Group.find();
+    res.render("groups/index", { groups, user: req.session.currentUser });
   } catch (error) {
     next(new Error('No groups', error))
   }
@@ -36,15 +38,19 @@ router.post(
       if (!id) {
         next(new Error(`User not found`))
       }
-      req.session.currentUser.isGroupCreator = true
-      await Group.create({
+
+      req.session.currentUser.isGroupCreator = true;
+
+      const group = await Group.create({
         members: [id],
+        creator: id,
         name,
         description,
         image,
         events: [],
-      })
-      res.redirect('/groups')
+      });
+
+      res.redirect(`/groups/${group._id}`);
     } catch (error) {
       next(new Error('Error', error))
     }
@@ -63,30 +69,34 @@ const findByName = async (groupName) => {
 // add user to group
 router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
   try {
-    const groupId = req.params.id
-    const userId = req.session.currentUser._id
+    const groupId = req.params.id;
+    const group = await Group.findById(groupId).populate("members");
+    const userId = req.session.currentUser._id;
+
     const user = await User.findByIdAndUpdate(userId, {
       $addToSet: { gMember: groupId },
     })
-    const group = await Group.findByIdAndUpdate(groupId, {
+    await Group.findByIdAndUpdate(groupId, {
       $addToSet: { members: userId },
-    })
-    res.render('groups/groupDetails', {
-      OurMessege: 'You added to our group',
-      group,
-      user: user.username,
-    })
-    //res.redirect(`/groups/${groupId}`)
+    });
+
+    res.redirect(`/groups/${groupId}`);
   } catch (error) {
     next(new Error('Group not found', error))
   }
 })
 // get group detail page
-router.get('/groups/:groupId', isLoggedIn, async (req, res, next) => {
-  const id = req.params.groupId
-  const group = await Group.findById(id).populate('members')
+router.get("/groups/:groupId", isLoggedIn, async (req, res, next) => {
   try {
-    res.render('groups/groupDetails', { group })
+    const groupId = req.params.groupId;
+    const group = await Group.findById(groupId).populate("members");
+
+    res.render("groups/groupDetails", {
+      group,
+      user: req.session.currentUser,
+      isAdmin:
+        req.session.currentUser && req.session.currentUser._id == group.creator,
+    });
   } catch (error) {
     next(new Error('Group not found', error))
   }
@@ -100,27 +110,37 @@ router.get('/groups/:id/edit', isLoggedIn, async (req, res, next) => {
   } catch (error) {
     next(new Error(error.message))
   }
-})
-// edit group
-router.post('/groups/:id', isLoggedIn, async (req, res, next) => {
-  try {
-    const id = req.params.id
-    const { name, description, image, events } = req.body
-    await Group.findByIdAndUpdate(
-      id,
-      {
-        name,
-        description,
-        image,
-        events,
-      },
-      { new: true }
-    )
-    res.redirect(`/groups`)
-  } catch (error) {
-    next(new Error(error.message))
+});
+
+// update group
+router.post(
+  "/groups/:id",
+  isLoggedIn,
+  upload.single("image"),
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const { name, description, image, events } = req.body;
+      const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
+
+      await Group.findByIdAndUpdate(
+        id,
+        {
+          name,
+          description,
+          image,
+          events,
+          imagePath: imagePath,
+        },
+        { new: true }
+      );
+      res.redirect(`/groups/${id}`);
+    } catch (error) {
+      next(new Error(error.message));
+    }
   }
-})
+);
+
 // delete group
 router.post('/groups/:id/delete', isLoggedIn, async (req, res, next) => {
   try {
@@ -148,8 +168,10 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
       }
       group.events.push(event)
     }
-    await group.save()
-    res.redirect('/groups')
+
+    await group.save();
+
+    res.redirect(`/groups/${groupId}`);
   } catch (error) {
     next(new Error(error.message))
   }

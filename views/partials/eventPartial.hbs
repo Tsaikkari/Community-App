@@ -1,13 +1,37 @@
-<div class='card'>
-  <div class='footer'>
-    <h2>{{name}}</h2>
-    <p>{{description}}</p>
-    <p><span class='specs'>When: </span>{{date}}</p>
-    <p><span class='specs'>Where: </span>{{address}}</p>
-    {{#each members}}
-      <ul>
+<div class="wrapper">
+  <h2 class="upper">{{name}}</h2>
+  <a href="#" class="meetup"> {{description}}</a>
+  <h3 class="group">Host: {{groupCreator.username}}</h3>
+  <p class="details">
+    Participants:
+    <ul>
+      {{#each members}}
         <li>{{this.username}}</li>
-      </ul>
-    {{/each}}
-  </div>
+      {{/each}}
+    </ul>
+    <span class="row">
+      <span class="row-item">
+        <time>⏲{{date}}</time>
+      </span>
+    </span>
+
+    <span class="row">
+      <span class="row-item">
+        <strong>🚩 {{address}}</strong>
+      </span>
+    </span>
+  </p>
 </div>
+
+<style>
+  .wrapper {margin:3px; background: #1cedae; display: flex; flex-direction:
+  column; padding: 1.5em; width: 300px; height: 326px; border-radius: 10px; }
+  .upper { border-bottom: 1px solid rgba(255, 255, 255, .7); font-weight: 400;
+  font-size: 24px; line-height: 2; text-transform: uppercase; } .meetup { color:
+  #fff; font-size: 32px; font-weight: 700; line-height: 1; text-decoration:
+  none; } .group { flex-grow: 1; } .icon { display: inline-block; position:
+  relative; top: -.1em; vertical-align: middle; } .details { display: flex;
+  flex-direction: column; } .row { display: flex; flex-direction: row;
+  justify-content: flex-start; margin-top: 10px; } .row-item { padding-left:
+  10px; }
+</style>

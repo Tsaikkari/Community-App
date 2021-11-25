@@ -1,64 +1,167 @@
-<div id='form'>
-  <h2>Signup</h2>
-  <form action='/signup' method='post' enctype='multipart/form-data'>
-    <div>
-      <input
-        accept='image/*'
-        type='file'
-        id='photo'
-        name='photo'
-        onchange="(function(e){e.currentTarget.nextSibling.nextSibling.src=window.URL.createObjectURL(e.currentTarget.files[0]||'');})(arguments[0])"
-      />
-      <img
-        id='previwImage'
-        src='#'
-        alt='your image'
-        width='100px'
-        height='100px'
-      />
-    </div>
-    <div>
-      <label>
-        Username
-      </label>
-      <input type='text' name='username' placeholder='ironhacker' />
-    </div>
-    <div>
-      <label>
-        Email
-      </label>
-      <input type='email' name='email' placeholder='rockstar@ironhack.com' />
-    </div>
-    <div>
-      <label>
-        Password
-      </label>
-      <input type='password' name='password' placeholder='********' />
-    </div>
-    <div>
-      <label>
-        Birthday
-      </label>
-      <input type='Date' name='dateOfBirth' vale='12-12-1983' />
-    </div>
-    <div style='display: flex; flex-flow:row;justify-content: space-between; '>
-      <div style='display:flex; flex-direction: row;'>
-        <input type='radio' id='male' name='gender' value='1' />
-        <label for='male'>male</label>
-      </div>
-      <div style='display:flex; flex-direction: row;'>
-        <input type='radio' id='fmale' name='gender' value='2' />
-        <label for='age2'>female</label>
-      </div>
-      <div style='display:flex; flex-direction: row;'>
-        <input type='radio' id='other' name='gender' value='3' />
-        <label for='other'>other</label>
-      </div>
-    </div>
-    <button type='submit'>Create account</button>
-
-  </form>
-</div>
 {{#if errorMessage}}
-  <p class='error'>{{errorMessage}}</p>
+  <p class="error">{{errorMessage}}</p>
 {{/if}}
+<form action="/signup" method="post" enctype="multipart/form-data">
+
+  <div class="container register">
+    <div class="row">
+      <div class="col-md-3 register-left">
+        <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
+        <h3>Welcome</h3>
+        <p>You are 30 seconds away from Joining to one of awsome Meetup
+          communities!</p>
+      </div>
+      <div class="col-md-9 register-right">
+        <div
+          class="tab-pane fade show"
+          id="profile"
+          role="tabpanel"
+          aria-labelledby="profile-tab"
+        >
+          <h3 class="register-heading">Registration Form</h3>
+          <div class="row register-form">
+            <div class="col-md-12">
+              <div
+                class="input-group mb-3"
+                style="position: relative; margin-top: 120px;"
+              >
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Upload</span>
+                </div>
+                <div class="custom-file">
+                  <input
+                    accept="image/*"
+                    type="file"
+                    id="photo"
+                    name="photo"
+                    onchange="(function(e){e.currentTarget.nextSibling.nextSibling.src=window.URL.createObjectURL(e.currentTarget.files[0]||'');})(arguments[0])"
+                  />
+                  <img
+                    style="position: absolute; top:-110px;  "
+                    id="previwImage"
+                    src="#"
+                    alt="your image"
+                    width="100px"
+                    height="100px"
+                  />
+                  <label class="custom-file-label" for="photo">Choose Picture</label>
+                </div>
+              </div>
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Username
+                  </span>
+                </div>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="username"
+                  placeholder="ironhacker"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Email
+                  </span>
+                </div>
+                <input
+                  class="form-control"
+                  type="email"
+                  name="email"
+                  placeholder="rockstar@ironhack.com"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Password
+                  </span></div>
+                <input
+                  class="form-control"
+                  type="password"
+                  name="password"
+                  placeholder="********"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Birthday
+                  </span>
+                  <input
+                    class="form-control"
+                    type="Date"
+                    name="dateOfBirth"
+                    vale="12-12-1983"
+                  />
+                </div>
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <input type="radio" id="male" name="gender" value="1" />
+                  </div>
+                </div>
+                <span class="form-control disabled gray">male</span>
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <input type="radio" id="fmale" name="gender" value="2" />
+                  </div>
+                </div>
+                <span class="form-control disabled gray">female</span>
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <input type="radio" id="other" name="gender" value="3" />
+                  </div>
+                </div>
+                <span class="form-control disabled gray">other</span>
+              </div>
+              <hr />
+              <button type="submit" class="btn btn-primary btn-lg">Create
+                account</button>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>
+<style>
+  .register{ background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+  margin-top: 3%; padding: 3%; } .register-left{ text-align: center; color:
+  #fff; margin-top: 4%; } .register-left input{ border: none; border-radius:
+  1.5rem; padding: 2%; width: 60%; background: #f8f9fa; font-weight: bold;
+  color: #383d41; margin-top: 30%; margin-bottom: 3%; cursor: pointer; }
+  .register-right{ background: #f8f9fa; border-top-left-radius: 10% 50%;
+  border-bottom-left-radius: 10% 50%; } .register-left img{ margin-top: 15%;
+  margin-bottom: 5%; width: 25%; -webkit-animation: mover 2s infinite alternate;
+  animation: mover 1s infinite alternate; } @-webkit-keyframes mover { 0% {
+  transform: translateY(0); } 100% { transform: translateY(-20px); } }
+  @keyframes mover { 0% { transform: translateY(0); } 100% { transform:
+  translateY(-20px); } } .register-left p{ font-weight: lighter; padding: 12%;
+  margin-top: -9%; } .register .register-form{ padding: 10%; margin-top: 10%; }
+  .btnRegister{ float: right; margin-top: 10%; border: none; border-radius:
+  1.5rem; padding: 2%; background: #0062cc; color: #fff; font-weight: 600;
+  width: 50%; cursor: pointer; } .register .nav-tabs{ margin-top: 3%; border:
+  none; background: #0062cc; border-radius: 1.5rem; width: 28%; float: right; }
+  .register .nav-tabs .nav-link{ padding: 2%; height: 34px; font-weight: 600;
+  color: #fff; border-top-right-radius: 1.5rem; border-bottom-right-radius:
+  1.5rem; } .register .nav-tabs .nav-link:hover{ border: none; } .register
+  .nav-tabs .nav-link.active{ width: 100px; color: #0062cc; border: 2px solid
+  #0062cc; border-top-left-radius: 1.5rem; border-bottom-left-radius: 1.5rem; }
+  .register-heading{ text-align: center; margin-top: 8%; margin-bottom: -15%;
+  color: #495057; }
+</style>

@@ -1,35 +1,65 @@
-<h2>Edit this group</h2>
-{{#with group}}
-  <form id='form' action='/groups/{{_id}}' method='POST'>
-    <label for='name'>Name: </label>
-    <input type='text' name='name' id='name' value='{{name}}' />
+<h2>Edit a Group</h2>
+<form
+  action="/groups/{{group._id}}"
+  method="post"
+  enctype="multipart/form-data"
+>
 
-    <label for='description'>Description: </label>
-    <input
-      type='text'
-      name='description'
-      id='description'
-      value='{{description}}'
-    />
-
-    <label for='photo'>Upload Image: </label>
-    <div>
+  <div class="input-group mb-3" style="position: relative; margin-top: 120px;">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Upload</span>
+    </div>
+    <div class="custom-file">
       <input
-        accept='image/*'
-        type='file'
-        id='photo'
-        name='photo'
+        accept="image/*"
+        type="file"
+        id="image"
+        value="{{group.image}}"
+        name="image"
         onchange="(function(e){e.currentTarget.nextSibling.nextSibling.src=window.URL.createObjectURL(e.currentTarget.files[0]||'');})(arguments[0])"
       />
       <img
-        id='previwImage'
-        src='#'
-        alt='your image'
-        width='100px'
-        height='100px'
+        style="position: absolute; top:-110px;  "
+        id="previwImage"
+        src="#"
+        alt="your image"
+        width="100px"
+        height="100px"
       />
+      <label class="custom-file-label" for="image">Choose Picture</label>
     </div>
+  </div>
 
-    <button type='submit'>Edit Group</button>
-  </form>
-{{/with}}
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        name
+      </span>
+    </div>
+    <input
+      class="form-control"
+      type="text"
+      name="name"
+      value="{{group.name}}"
+      placeholder="group Name"
+    />
+  </div>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        description
+      </span>
+    </div>
+    <input
+      class="form-control"
+      type="text"
+      value="{{group.description}}"
+      name="description"
+      placeholder="group description"
+    />
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-lg">Update Group</button>
+
+</form>
