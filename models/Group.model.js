@@ -45,7 +45,10 @@ const groupSchema = new Schema(
       type: String,
       required: true,
     },
-    image: String,
+    image: {
+      type: String,
+      trim: true,
+    },
     creator: {
       type: Schema.Types.ObjectId,
       required: true,

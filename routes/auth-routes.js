@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 const { Router } = require("express");
 const router = new Router();
 const User = require("../models/User.model");
-const multer = require("multer");
 const moment = require("moment");
 
-const upload = multer({ dest: "./public/uploads" });
+//const upload = multer({ dest: "./public/uploads" });
+const uploader = require('../config/cloudinary.config');
 
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
 
@@ -21,7 +21,7 @@ router.get("/logout", (req, res, next) => {
 //********************************************************************** */
 const bcryptjs = require("bcryptjs");
 const saltRounds = 10;
-router.post("/signup", upload.single("photo"), async (req, res, next) => {
+router.post("/signup", uploader.single("photo"), async (req, res, next) => {
   console.log(req.body);
   const {
     username,
@@ -34,11 +34,11 @@ router.post("/signup", upload.single("photo"), async (req, res, next) => {
   } = req.body;
   //console.log("xxxxxx",  moment(dateOfBirth).format('L')  );
   let shortDate = moment(dateOfBirth).format("L");
-  const imagePath = req.file
-    ? `/uploads/${req.file.filename}`
-    : "/images/avatar.png";
+  const imagePath = req.file.path
+  // const imagePath = req.file
+  //   ? `/uploads/${req.file.filename}`
+  //   : "/images/avatar.png";
 
-  // const { username, email, password } = req.body;
   if (!username || !email || !password) {
     res.render("auth/signup", {
       errorMessage: "Please provide your username, email and password.",
