@@ -1,22 +1,21 @@
-<div class="wrapper">
-  <h2 class="upper">{{name}}</h2>
-  <a href="#" class="meetup"> {{description}}</a>
-  <h3 class="group">Host: {{groupCreator.username}}</h3>
-  <p class="details">
+<div class='wrapper'>
+  <h2 class='upper'>{{name}}</h2>
+  <a href='#' class='meetup'> {{description}}</a>
+  <p class='details'>
     Participants:
     <ul>
       {{#each members}}
         <li>{{this.username}}</li>
       {{/each}}
     </ul>
-    <span class="row">
-      <span class="row-item">
+    <span class='row'>
+      <span class='row-item'>
         <time>⏲{{date}}</time>
       </span>
     </span>
 
-    <span class="row">
-      <span class="row-item">
+    <span class='row'>
+      <span class='row-item'>
         <strong>🚩 {{address}}</strong>
       </span>
     </span>
