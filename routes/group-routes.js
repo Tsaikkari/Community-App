@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const moment = require ("moment");
+
 const Group = require("../models/Group.model");
 const User = require("../models/User.model");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
@@ -157,11 +159,13 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
     const { name, description, date, time, address } = req.body
     const groupId = req.params.groupId
     const group = await Group.findById(groupId)
+    let formattedDate = moment(date).format('L');
+
     if (group) {
       const event = {
         name,
         description,
-        date,
+        date: formattedDate,
         time,
         address,
         groupCreator: req.session.currentUser._id,
