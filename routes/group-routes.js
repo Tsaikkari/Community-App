@@ -182,6 +182,7 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
     next(new Error(error.message))
   }
 })
+
 // get add events page of a group
 router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
   try {
@@ -191,4 +192,20 @@ router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
     next(new Error('Events not found', error))
   }
 })
+
+// get edit event page
+router.get('/groups/:groupId/events/:eventId/edit', (req, res, next) => {
+  try {
+    const groupId = req.params.groupId
+    const eventId = req.params.eventId
+
+    const group = Group.findById(groupId).populate('events')
+    const event = group.events.filter(event => event._id === eventId)
+
+    res.render('/groups/editEvent', { group , event })
+  } catch (error) {
+    next(new Error(error.message))
+  }
+})
+
 module.exports = router

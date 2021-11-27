@@ -23,7 +23,7 @@
 
     <div class='card-text events-div'>
       <hr/>
-      <h4> Events:</h4>
+      <h4>Events</h4>
       <div style="display: flex; flex-flow: row wrap;">
       {{#each group.events}}
         {{> eventPartial this}}
@@ -33,7 +33,7 @@
 
     <div class='card-text'>
       <hr/>
-      <h4> Group Members:</h4>
+      <h4>Group Members</h4>
       <ul style="display: flex; flex-flow:row wrap;">
         {{#each group.members}}
           <li class="btn btn-outline-success" style="margin:5px">
@@ -45,46 +45,46 @@
 
     <div >
       <hr/>
-      <h4> Actions:</h4>
       <form class="btn btn-primary"
-          action='/groups/{{group._id}}/add'
-          method='POST'
+        action='/groups/{{group._id}}/add'
+        method='POST'
         >
         <button type="submit" class="btn btn-primary">
-            Join this group
+          Join this group
         </button>
       </form>
 
       {{#if isAdmin}}
-      <form class="btn btn-primary"
-          action="/groups/{{group._id}}/events/new"
-          method='GET'
+      <h4>Admin Actions</h4>
+      {{> editEventPartial this }}
+      <div class="admin-actions">
+        <form 
+        action="/groups/{{group._id}}/events/new"
+        method='GET'
         >
         <button type="submit" class="btn btn-primary">
-        Create an Event
+          Create Event
         </button>
       </form>
 
-      <form class="btn btn-primary"
-          action="/groups/{{group._id}}/edit"
-          method='GET'
+      <form 
+        action="/groups/{{group._id}}/edit"
+        method='GET'
         >
         <button type="submit" class="btn btn-primary">
-          Edit this group        
+          Edit Group       
         </button>
       </form>
 
-
-      
-    <form class="btn btn-primary"
-      action="/groups/{{group._id}}/delete" 
-      method="POST">
+      <form
+        action="/groups/{{group._id}}/delete" 
+        method="POST">
       <button type="submit" class="btn btn-primary">
-            Delete this group ❌
+        Delete Group ❌
       </button>
     </form>
+      </div>
       {{/if}}
     </div>
-
   </div>
 </div>

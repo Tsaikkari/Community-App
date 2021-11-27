@@ -1,0 +1,79 @@
+<h2>Edit Event</h2>
+<form action='/groups/{{group._id}}/events/{{event._id}}' method='POST'>
+  <div class='input-group mb-3'>
+    <div class='input-group-prepend'>
+      <span class='input-group-text'>
+        Name
+      </span>
+    </div>
+    <input
+      class='form-control'
+      type='text'
+      name='name'
+      value='{{event.name}}'
+      placeholder='group Name'
+    />
+  </div>
+
+  <div class='input-group mb-3'>
+    <div class='input-group-prepend'>
+      <span class='input-group-text'>
+        Description
+      </span>
+    </div>
+    <input
+      class='form-control'
+      type='text'
+      value='{{event.description}}'
+      name='description'
+      placeholder='group description'
+    />
+  </div>
+
+  <div class='input-group mb-3'>
+    <div class='input-group-prepend'>
+      <span class='input-group-text'>
+        Date
+      </span>
+    </div>
+    <input
+      class='form-control'
+      type='date'
+      name='date'
+      placeholder=''
+      value={{date}}
+    />
+  </div>
+
+  <div class='input-group mb-3'>
+    <div class='input-group-prepend'>
+      <span class='input-group-text'>
+        Time
+      </span>
+    </div>
+    <input
+      class='form-control'
+      type='time'
+      name='time'
+      placeholder='time'
+      value={{time}}
+    />
+  </div>
+
+  <div class='input-group mb-3'>
+    <div class='input-group-prepend'>
+      <span class='input-group-text'>
+        Address
+      </span>
+    </div>
+    <input
+      class='form-control'
+      type='text'
+      value='{{address.description}}'
+      name='description'
+      placeholder='group description'
+    />
+  </div>
+
+  <button type='submit' class='btn btn-primary btn-lg'>Update Event</button>
+</form>
