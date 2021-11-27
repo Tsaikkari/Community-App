@@ -24,10 +24,11 @@
     <div class='card-text events-div'>
       <hr/>
       <h4> Events:</h4>
-
+      <div style="display: flex; flex-flow: row wrap;">
       {{#each group.events}}
         {{> eventPartial this}}
       {{/each}}
+      </div>
     </div>
 
     <div class='card-text'>

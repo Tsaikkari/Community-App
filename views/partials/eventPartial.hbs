@@ -1,36 +1,34 @@
-<div class="wrapper">
-  <h2 class="upper">{{name}}</h2>
-  <a href="#" class="meetup"> {{description}}</a>
-  <h3 class="group">Host: {{groupCreator.username}}</h3>
-  <p class="details">
-    Participants:
-    <ul>
-      {{#each members}}
-        <li>{{this.username}}</li>
-      {{/each}}
-    </ul>
-    <span class="row">
-      <span class="row-item">
-        <time>⏲{{date}}</time>
+<div class='wrapper'>
+  <h1 class='upper'>{{name}}</h1>
+  <a href='#' class='meetup'> {{description}}</a>
+  <div class='details'>
+    <p class='row'>
+      <span class='row-item'>
+        <strong>📅 {{date}}</strong>
       </span>
-    </span>
+    </p>
+    <p class='row'>
+      <span class='row-item'>
+        <strong>⏲ {{time}}</strong>
+      </span>
+    </p>
 
-    <span class="row">
-      <span class="row-item">
+    <p class='row'>
+      <span class='row-item'>
         <strong>🚩 {{address}}</strong>
       </span>
-    </span>
-  </p>
+    </p>
+  </div>
 </div>
 
 <style>
-  .wrapper { background: #1cedae; display: flex; flex-direction: column;
-  padding: 1.5em; width: 456px; height: 326px; border-radius: 10px; } .upper {
-  border-bottom: 1px solid rgba(255, 255, 255, .7); font-weight: 400; font-size:
-  24px; line-height: 2; text-transform: uppercase; } .meetup { color: #fff;
-  font-size: 32px; font-weight: 700; line-height: 1; text-decoration: none; }
-  .group { flex-grow: 1; } .icon { display: inline-block; position: relative;
-  top: -.1em; vertical-align: middle; } .details { display: flex;
+  .wrapper {margin:3px; background: #ebdf3a; display: flex; flex-direction:
+  column; padding: 1.5em; width: 300px; height: 326px; border-radius: 10px; }
+  .upper { border-bottom: 1px solid rgba(255, 255, 255, .7); font-weight: 400;
+  font-size: 24px; line-height: 2; text-transform: uppercase; } .meetup { color:
+  #fff; font-size: 25px; font-weight: 700; line-height: 1; text-decoration:
+  none; } .group { flex-grow: 1; } .icon { display: inline-block; position:
+  relative; top: -.1em; vertical-align: middle; } .details { display: flex;
   flex-direction: column; } .row { display: flex; flex-direction: row;
   justify-content: flex-start; margin-top: 10px; } .row-item { padding-left:
   10px; }
