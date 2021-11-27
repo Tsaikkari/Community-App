@@ -1,86 +1,81 @@
 <h2>Create an Event</h2>
 {{#with group}}
-  <form action="/groups/{{_id}}/events" method="POST">
+  <form action='/groups/{{_id}}/events' method='POST'>
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">
+    <div class='input-group mb-3'>
+      <div class='input-group-prepend'>
+        <span class='input-group-text'>
           name
         </span>
       </div>
       <input
-        class="form-control"
-        type="text"
-        name="name"
-        placeholder="Event Name"
+        class='form-control'
+        type='text'
+        name='name'
+        placeholder='Event Name'
       />
     </div>
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">
+    <div class='input-group mb-3'>
+      <div class='input-group-prepend'>
+        <span class='input-group-text'>
           description
         </span>
       </div>
       <input
-        class="form-control"
-        type="text"
-        name="description"
-        placeholder="description"
+        class='form-control'
+        type='text'
+        name='description'
+        placeholder='description'
       />
     </div>
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">
-          Date
+    <div class='input-group mb-3'>
+      <div class='input-group-prepend'>
+        <span class='input-group-text'>
+          date
         </span>
       </div>
-      <input class="form-control" type="date" name="Date" placeholder="" />
+      <input class='form-control' type='date' name='date' placeholder='' />
     </div>
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">
+    <div class='input-group mb-3'>
+      <div class='input-group-prepend'>
+        <span class='input-group-text'>
           time
         </span>
       </div>
-      <input
-        class="form-control"
-        type="time"
-        name="time"
-        placeholder="group Name"
-      />
+      <input class='form-control' type='time' name='time' placeholder='time' />
     </div>
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">
+    <div class='input-group mb-3'>
+      <div class='input-group-prepend'>
+        <span class='input-group-text'>
           address
         </span>
       </div>
       <input
-        class="form-control"
-        type="text"
-        name="address"
-        placeholder="group Name"
+        class='form-control'
+        type='text'
+        name='address'
+        placeholder='address'
       />
     </div>
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">
+    <div class='input-group mb-3'>
+      <div class='input-group-prepend'>
+        <span class='input-group-text'>
           Host
         </span>
       </div>
       <input
-        class="form-control"
-        type="text"
-        name="groupCreator"
-        placeholder="group Name"
+        class='form-control'
+        type='text'
+        name='groupCreator'
+        placeholder='host'
       />
     </div>
 
-    <button type="submit" class="btn btn-primary btn-lg">Create Event</button>
+    <button type='submit' class='btn btn-primary btn-lg'>Create Event</button>
   </form>
 {{/with}}

@@ -159,17 +159,19 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
     const { name, description, date, time, address } = req.body
     const groupId = req.params.groupId
     const group = await Group.findById(groupId)
-    let formattedDate = moment(date);
+    const eventDate = new Date(date).toLocaleString().split(',')[0].split('/')
+    const formatted = `${eventDate[1]}.${eventDate[0]}.${eventDate[2]}`
 
     if (group) {
       const event = {
         name,
         description,
-        date: formattedDate,
+        date: formatted,
         time,
         address,
         groupCreator: req.session.currentUser._id,
       }
+      console.log('EVENTCREATED', event)
       group.events.push(event)
     }
 
