@@ -159,7 +159,7 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
     const { name, description, date, time, address } = req.body
     const groupId = req.params.groupId
     const group = await Group.findById(groupId)
-    let formattedDate = moment(date).format('L');
+    let formattedDate = moment(date);
 
     if (group) {
       const event = {
