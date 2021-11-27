@@ -3,17 +3,9 @@ const multer = require("multer");
 const Group = require("../models/Group.model");
 const User = require("../models/User.model");
 
-const router = require('express').Router();
-const multer = require("multer");
-
-const Group = require('../models/Group.model')
-const User = require('../models/User.model')
-
 const upload = multer({ dest: "./public/uploads" });
 
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
-
-const upload = multer({ dest: "./public/uploads" });
 
 // get all groups and render
 router.get("/groups", async (req, res, next) => {
@@ -61,38 +53,44 @@ router.post(
         image,
         events: [],
       });
-      
-router.post('/groups', isLoggedIn, upload.single("photo"), async (req, res, next) => {
-  try {
-    const { name, description, image } = req.body
-    const id = req.session.currentUser._id
-    const imagePath =req.file? `/uploads/${req.file.filename}`:'';
 
-      const user = await User.findByIdAndUpdate(id, {
-        $addToSet: { gMember: group._id },
-      });
-
-      res.redirect(`/groups/${group._id}`);
+      res.redirect('/groups')
     } catch (error) {
-      next(new Error("Error", error));
+      next(new Error('Error', error))
     }
+  })
+      
+// router.post('/groups', isLoggedIn, upload.single("photo"), async (req, res, next) => {
+//   try {
+//     const { name, description, image } = req.body
+//     const id = req.session.currentUser._id
+//     const imagePath =req.file? `/uploads/${req.file.filename}`:'';
 
-    req.session.currentUser.isGroupCreator = true;
+//       const user = await User.findByIdAndUpdate(id, {
+//         $addToSet: { gMember: group._id },
+//       });
 
-    await Group.create({
-      members: [id],
-      name, 
-      description, 
-      image, 
-      events: [],
-      imagePath: imagePath,
-    })
+//       res.redirect(`/groups/${group._id}`);
+//     } catch (error) {
+//       next(new Error("Error", error));
+//     }
 
-    res.redirect("/groups");
-  } catch (error) {
-    next(new Error("Error", error));
-  }
-);
+//     req.session.currentUser.isGroupCreator = true;
+
+//     await Group.create({
+//       members: [id],
+//       name, 
+//       description, 
+//       image, 
+//       events: [],
+//       imagePath: imagePath,
+//     })
+
+//     res.redirect("/groups");
+//   } catch (error) {
+//     next(new Error("Error", error));
+//   }
+// );
 
 // TODO: search bar
 const findByName = async (groupName) => {
@@ -129,6 +127,8 @@ router.post("/groups/:id/add", isLoggedIn, async (req, res, next) => {
 // get group detail page
 router.get('/groups/:groupId', isLoggedIn, async (req, res, next) => {
   try {
+    const id = req.params.groupId
+    const group = await Group.findById(id).populate('members')
     res.render("groups/groupDetails", {
       group,
       user: req.session.currentUser,
