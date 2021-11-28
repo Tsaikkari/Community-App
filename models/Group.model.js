@@ -6,11 +6,11 @@ const eventSchema = new Schema(
       required: true,
     },
     description: {
-      type: String,
+      type: String
     },
     date: {
       type: String,
-      retuired: true,
+      required: true,
     },
     time: {
       type: String,

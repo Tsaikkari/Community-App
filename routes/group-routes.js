@@ -96,8 +96,6 @@ router.get("/groups/:groupId", isLoggedIn, async (req, res, next) => {
       }
     });
 
-    console.log('EVENTS', events)
-
     res.render("groups/groupDetails", {
       events,
       group,
@@ -197,7 +195,7 @@ router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
   }
 })
 
-// edit event
+// update event
 router.post('/groups/:groupId/events/:eventId', async (req, res, next) => {
   try {
     const groupId = req.params.groupId
@@ -208,6 +206,7 @@ router.post('/groups/:groupId/events/:eventId', async (req, res, next) => {
     const eventDate = new Date(date).toLocaleString().split(',')[0].split('/')
     const formatted = `${eventDate[1]}.${eventDate[0]}.${eventDate[2]}`
     const events = group.events
+    console.log('EVENTS', events)
 
     await events.findByIdAndUpdate(
       eventId, 
@@ -235,7 +234,7 @@ router.get('/groups/:groupId/events/:eventId/edit', async (req, res, next) => {
     const group = await Group.findById(groupId).populate('events')
     const event = group.events.filter(event => event._id === eventId)
 
-    res.render('/groups/editEvent', { group , event })
+    res.render('groups/editEvent', { group , event })
   } catch (error) {
     next(new Error(error.message))
   }
