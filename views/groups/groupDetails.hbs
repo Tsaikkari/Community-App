@@ -45,7 +45,7 @@
 
     <div >
       <hr/>
-      <form class="btn btn-primary"
+      <form
         action='/groups/{{group._id}}/add'
         method='POST'
         >
@@ -56,7 +56,18 @@
 
       {{#if isAdmin}}
       <h4>Admin Actions</h4>
-      {{> editEventPartial this }}
+      {{#each events}}
+        <form
+          class='edit-event'
+          action='/groups/{{groupId}}/events/{{event._id}}/edit'
+          method='GET'
+        >
+          <button type='submit' class='edit-event-btn'>
+            Update
+            {{event.name}}
+          </button>
+        </form>
+      {{/each}}
       <div class="admin-actions">
         <form 
         action="/groups/{{group._id}}/events/new"
