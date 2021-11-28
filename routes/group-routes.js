@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const moment = require ("moment");
 
 const Group = require("../models/Group.model");
 const User = require("../models/User.model");
@@ -51,9 +50,7 @@ router.post(
         events: [],
       });
 
-      console.log('GROUP', group)
-
-      res.redirect(`/groups/${group._id}`);
+      res.redirect('/groups')
     } catch (error) {
       next(new Error('Error', error))
     }
@@ -91,10 +88,16 @@ router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
 // get group detail page
 router.get("/groups/:groupId", isLoggedIn, async (req, res, next) => {
   try {
-    const groupId = req.params.groupId;
-    const group = await Group.findById(groupId).populate("members");
+    const group = await Group.findById(req.params.groupId).populate('members').populate('events');
+    const events = group.events.map(event => {
+      return {
+        groupId: req.params.groupId,
+        event
+      }
+    });
 
     res.render("groups/groupDetails", {
+      events,
       group,
       user: req.session.currentUser,
       isAdmin:
@@ -124,8 +127,7 @@ router.post(
     try {
       const id = req.params.id;
       const { name, description, image, events } = req.body;
-      //const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
-
+     
       await Group.findByIdAndUpdate(
         id,
         {
@@ -171,7 +173,7 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
         address,
         groupCreator: req.session.currentUser._id,
       }
-      console.log('EVENTCREATED', event)
+
       group.events.push(event)
     }
 
@@ -182,6 +184,7 @@ router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
     next(new Error(error.message))
   }
 })
+
 // get add events page of a group
 router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
   try {
@@ -191,4 +194,50 @@ router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
     next(new Error('Events not found', error))
   }
 })
+
+// update event
+router.post('/groups/:groupId/events/:eventId', async (req, res, next) => {
+  try {
+    const groupId = req.params.groupId
+    const eventId = req.params.eventId
+    const { name, description, date, time, address } = req.body
+
+    const group = await Group.findById(groupId).populate('events')
+    const eventDate = new Date(date).toLocaleString().split(',')[0].split('/')
+    const formatted = `${eventDate[1]}.${eventDate[0]}.${eventDate[2]}`
+    const events = group.events
+    console.log('EVENTS', events)
+
+    await events.findByIdAndUpdate(
+      eventId, 
+      {
+        name,
+        description,
+        date: formatted,
+        time,
+        address
+      },
+      { new: true }
+    )
+    res.redirect(`/groups/${groupId}`);
+  } catch (error) {
+    next(new Error(`Event update failed`, error.message))
+  }
+})
+
+// get edit event page
+router.get('/groups/:groupId/events/:eventId/edit', async (req, res, next) => {
+  try {
+    const groupId = req.params.groupId
+    const eventId = req.params.eventId
+
+    const group = await Group.findById(groupId).populate('events')
+    const event = group.events.filter(event => event._id === eventId)
+
+    res.render('groups/editEvent', { group , event })
+  } catch (error) {
+    next(new Error(error.message))
+  }
+})
+
 module.exports = router
