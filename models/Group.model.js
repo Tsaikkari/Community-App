@@ -67,6 +67,7 @@ const groupSchema = new Schema(
   }
 );
 
+//const Event = model("Event", eventSchema)
 const Group = model("Group", groupSchema);
 
-module.exports = Group;
+module.exports = Group
