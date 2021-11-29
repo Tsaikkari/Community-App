@@ -202,7 +202,7 @@ router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
   }
 })
 
-// TODO: this creates a new event instead of updating the event
+// TODO: this creates a new event instead of updating 
 // update event
 router.post('/groups/:groupId/events/:eventId', async (req, res, next) => {
   try {
