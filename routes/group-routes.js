@@ -17,6 +17,7 @@ router.get('/groups', async (req, res, next) => {
     next(new Error('No groups', error))
   }
 })
+
 // get add new group page
 router.get('/groups/new', isLoggedIn, async (req, res, next) => {
   try {
@@ -25,6 +26,7 @@ router.get('/groups/new', isLoggedIn, async (req, res, next) => {
     next(new Error(error.message))
   }
 })
+
 // create a group
 router.post(
   '/groups',
@@ -56,6 +58,7 @@ router.post(
     }
   }
 )
+
 // TODO: search bar
 const findByName = async (groupName) => {
   try {
@@ -66,6 +69,7 @@ const findByName = async (groupName) => {
     throw new Error(`Group ${groupName} not found`)
   }
 }
+
 // add user to group
 router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
   try {
@@ -85,6 +89,7 @@ router.post('/groups/:id/add', isLoggedIn, async (req, res, next) => {
     next(new Error('Group not found', error))
   }
 })
+
 // get group detail page
 router.get("/groups/:groupId", isLoggedIn, async (req, res, next) => {
   try {
@@ -107,6 +112,7 @@ router.get("/groups/:groupId", isLoggedIn, async (req, res, next) => {
     next(new Error('Group not found', error))
   }
 })
+
 // get edit group page
 router.get('/groups/:id/edit', isLoggedIn, async (req, res, next) => {
   try {
@@ -155,6 +161,7 @@ router.post('/groups/:id/delete', isLoggedIn, async (req, res, next) => {
     next(new Error(error.message))
   }
 })
+
 // create an event
 router.post('/groups/:groupId/events', isLoggedIn, async (req, res, next) => {
   try {
@@ -195,6 +202,7 @@ router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
   }
 })
 
+// TODO: this creates a new event instead of updating
 // update event
 router.post('/groups/:groupId/events/:eventId', async (req, res, next) => {
   try {
@@ -206,7 +214,6 @@ router.post('/groups/:groupId/events/:eventId', async (req, res, next) => {
     const eventDate = new Date(date).toLocaleString().split(',')[0].split('/')
     const formatted = `${eventDate[1]}.${eventDate[0]}.${eventDate[2]}`
     const events = group.events
-    console.log('EVENTS', events)
 
     await events.findByIdAndUpdate(
       eventId, 
@@ -222,6 +229,40 @@ router.post('/groups/:groupId/events/:eventId', async (req, res, next) => {
     res.redirect(`/groups/${groupId}`);
   } catch (error) {
     next(new Error(`Event update failed`, error.message))
+  }
+})
+
+// delete event
+// router.post('/groups/:groupId/events/:eventId/delete', async (req, res, next) => {
+//   try {
+//     const events = await Group.findById(req.params.groupId).populate('events')
+//     console.log('EVENTS', events)
+//     const groupEvents = await Group.find(events).where(req.params.eventId).in([events])
+//     console.log('GROUPEVENTS', groupEvents)
+//     await Group.findByIdAndDelete(req.params.eventId, { _id: { $in: groupEvents }})
+//     res.redirect(`/groups/${req.params.groupId}`)
+//   } catch (error) {
+//     next(new Error(error.message))
+//   }
+// })
+
+// delete event
+router.post('/groups/:groupId/events/:eventId/delete', async (req, res, next) => {
+  try {
+    const eventId = req.params.eventId
+    const group = await Group.findById(req.params.groupId)
+    console.log('EVENTID', req.params.eventId)
+    console.log('GROUP.events', group.events)
+    const eventIndex = await group.events.findIndex(e => e._id === eventId)
+  
+    console.log('EVENTINDEX', eventIndex) // Why is this -1?
+    if (eventIndex !== -1) {
+      group.events.splice(eventIndex, 1)
+    }
+
+    res.redirect(`/groups/${req.params.groupId}`)
+  } catch (error) {
+    next(new Error(error.message))
   }
 })
 
