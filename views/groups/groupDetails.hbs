@@ -59,7 +59,7 @@
       {{#each events}}
         <form
           class='edit-event'
-          action='/groups/{{groupId}}/events/{{event._id}}/edit'
+          action='/groups/{{groupId}}/events/{{event.name}}/edit'
           method='GET'
         >
           <button type='submit' class='edit-event-btn'>
@@ -69,7 +69,7 @@
         </form>
 
         <form
-          action="/groups/{{groupId}}/events/{{event._id}}/delete" 
+          action="/groups/{{groupId}}/events/{{event.name}}/delete" 
           method="POST">
           <button type="submit" class="btn btn-danger">
             Delete {{event.name}} 

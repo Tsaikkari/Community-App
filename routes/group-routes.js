@@ -5,6 +5,7 @@ const User = require("../models/User.model");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
 
 const uploader = require('../config/cloudinary.config');
+const { isValidObjectId } = require("mongoose");
 
 // get all groups and render
 router.get('/groups', async (req, res, next) => {
@@ -202,30 +203,30 @@ router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
   }
 })
 
-// TODO: this creates a new event instead of updating 
 // update event
-router.post('/groups/:groupId/events/:eventId', async (req, res, next) => {
+router.post('/groups/:groupId/event/:name', async (req, res, next) => {
   try {
     const groupId = req.params.groupId
-    const eventId = req.params.eventId
     const { name, description, date, time, address } = req.body
 
-    const group = await Group.findById(groupId).populate('events')
     const eventDate = new Date(date).toLocaleString().split(',')[0].split('/')
     const formatted = `${eventDate[1]}.${eventDate[0]}.${eventDate[2]}`
-    const events = group.events
 
-    await events.findByIdAndUpdate(
-      eventId, 
-      {
-        name,
-        description,
-        date: formatted,
-        time,
-        address
-      },
-      { new: true }
-    )
+    const group = await Group.findById(groupId).populate('events')
+    let event = await group.events.find(ev => ev.name === req.params.name)
+  
+    event = {
+      name,
+      description,
+      date: formatted,
+      time,
+      address
+    }
+
+    // TODO: fix
+    await Group.findByIdAndUpdate(groupId, [...group.events, event])
+    console.log(group.events, 'groupEventsssss')
+
     res.redirect(`/groups/${groupId}`);
   } catch (error) {
     next(new Error(`Event update failed`, error.message))
@@ -233,33 +234,19 @@ router.post('/groups/:groupId/events/:eventId', async (req, res, next) => {
 })
 
 // delete event
-// router.post('/groups/:groupId/events/:eventId/delete', async (req, res, next) => {
-//   try {
-//     const events = await Group.findById(req.params.groupId).populate('events')
-//     console.log('EVENTS', events)
-//     const groupEvents = await Group.find(events).where(req.params.eventId).in([events])
-//     console.log('GROUPEVENTS', groupEvents)
-//     await Group.findByIdAndDelete(req.params.eventId, { _id: { $in: groupEvents }})
-//     res.redirect(`/groups/${req.params.groupId}`)
-//   } catch (error) {
-//     next(new Error(error.message))
-//   }
-// })
-
-// delete event
-router.post('/groups/:groupId/events/:eventId/delete', async (req, res, next) => {
+router.post('/groups/:groupId/events/:name/delete', async (req, res, next) => {
   try {
-    const eventId = req.params.eventId
+    const eventName = req.params.name
     const group = await Group.findById(req.params.groupId)
-    console.log('EVENTID', req.params.eventId)
-    console.log('GROUP.events', group.events)
-    const eventIndex = await group.events.findIndex(e => e._id === eventId)
+    const eventIndex = await group.events.findIndex(e => e.name === eventName)
+    const copyEvents = [...group.events]
   
-    console.log('EVENTINDEX', eventIndex) // Why is this -1?
     if (eventIndex !== -1) {
-      group.events.splice(eventIndex, 1)
+      copyEvents.splice(eventIndex, 1)
     }
 
+    // TODO: fix
+   
     res.redirect(`/groups/${req.params.groupId}`)
   } catch (error) {
     next(new Error(error.message))
@@ -267,14 +254,11 @@ router.post('/groups/:groupId/events/:eventId/delete', async (req, res, next) =>
 })
 
 // get edit event page
-router.get('/groups/:groupId/events/:eventId/edit', async (req, res, next) => {
+router.get('/groups/:groupId/events/:name/edit', async (req, res, next) => {
   try {
-    const groupId = req.params.groupId
-    const eventId = req.params.eventId
-
-    const group = await Group.findById(groupId).populate('events')
-    const event = group.events.filter(event => event._id === eventId)
-
+    const group = await Group.findById(req.params.groupId)
+    const groupEvents = group.events
+    const event = await groupEvents.find(ev => ev.name === req.params.name)
     res.render('groups/editEvent', { group , event })
   } catch (error) {
     next(new Error(error.message))
