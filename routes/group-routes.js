@@ -189,7 +189,7 @@ router.get('/groups/:id/events/new', isLoggedIn, async (req, res, next) => {
 })
 
 // get edit event page
-router.get('/groups/:groupId/events/:eventId/edit', async (req, res, next) => {
+router.get('/groups/:groupId/events/:name/edit', async (req, res, next) => {
   try {
     const groupId = req.params.groupId
     const eventId = req.params.eventId
