@@ -2,22 +2,28 @@ body {
   margin: 0;
   padding: 0;
 }
+
 .navbar {
   background-color: #000;
 }
+
 nav {
   height: 130px;
 }
+
 .navbar-nav {
   margin: auto;
 }
+
 .nav-link {
   margin: 10px 25px;
   color: #fff;
 }
+
 .nav-link:hover {
   color: yellow;
 }
+
 .box {
   z-index: -1;
   width: 100%;
@@ -25,6 +31,7 @@ nav {
   background-color: #000;
   position: absolute;
 }
+
 .box-1 {
   width: 100%;
   background-color: #fff;
@@ -33,6 +40,7 @@ nav {
   border-top: 5px solid yellow;
   border-right: 5px solid yellow;
 }
+
 h1 {
   margin-top: 200px;
 }
@@ -50,6 +58,12 @@ h1 {
 
 .img-fluid {
   max-width: 100%;
+}
+
+.group-card-img {
+  height: 300px;
+  width: 300px;
+  margin: 0 auto;
 }
 
 .btn-primary {

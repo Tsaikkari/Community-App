@@ -2,22 +2,19 @@
   <h5>{{username}}{{OurMessege}}</h5>
   {{#if group.image}}
     <img
-      class="card-img-top"
+      class="group-card-img"
       src="{{group.image}}"
       alt={{group.name}}
-      height="200px"
-      width="200px"
     />
   {{else}}
     <img
-      class="card-img-top"
+      class="group-card-img"
       src="/images/default.png"
       alt={{group.name}}
-      height="200px"
     />
   {{/if}}
   <div class="card-body">
-    <h5 class="card-title">{{group.name}}</h5>
+    <h2 class="card-title">{{group.name}}</h2>
     <p class="card-text">{{group.description}}</p>
 
 
@@ -56,26 +53,6 @@
 
       {{#if isAdmin}}
       <h4>Admin Actions</h4>
-      {{#each events}}
-        <form
-          class='edit-event'
-          action='/groups/{{groupId}}/events/{{event._id}}/edit'
-          method='GET'
-        >
-          <button type='submit' class='edit-event-btn'>
-            Update
-            {{event.name}}
-          </button>
-        </form>
-
-        <form
-          action="/groups/{{groupId}}/events/{{event._id}}/delete" 
-          method="POST">
-          <button type="submit" class="btn btn-danger">
-            Delete {{event.name}} 
-          </button>
-        </form>
-      {{/each}}
       <div class="admin-actions">
         <form 
         action="/groups/{{group._id}}/events/new"

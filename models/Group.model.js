@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose')
 const eventSchema = new Schema(
   {
     name: {
@@ -6,7 +6,7 @@ const eventSchema = new Schema(
       required: true,
     },
     description: {
-      type: String
+      type: String,
     },
     date: {
       type: String,
@@ -22,17 +22,17 @@ const eventSchema = new Schema(
     groupCreator: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "user",
+      ref: 'user',
     },
     imagePath: {
       type: String,
       trim: true,
-    }
+    },
   },
   {
     timestamps: true,
   }
-);
+)
 
 const groupSchema = new Schema(
   {
@@ -52,12 +52,12 @@ const groupSchema = new Schema(
     creator: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "user",
+      ref: 'user',
     },
     members: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
       },
     ],
     events: [eventSchema],
@@ -65,9 +65,8 @@ const groupSchema = new Schema(
   {
     timestamps: true,
   }
-);
+)
 
-//const Event = model("Event", eventSchema)
-const Group = model("Group", groupSchema);
+const Group = model('Group', groupSchema)
 
 module.exports = Group
